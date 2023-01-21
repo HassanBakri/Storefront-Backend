@@ -1,4 +1,4 @@
-// psql -h localhost -U full_stack_user -d full_stack_dev
+// psql -h localhost -U shopping_user -d shopping
 //import dotenv from 'dotenv'
 import { Pool } from 'pg';
 import con from './hassanconfig';

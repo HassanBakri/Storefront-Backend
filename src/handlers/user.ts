@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { User, UserStore } from '../models/user';
 import jwt from 'jsonwebtoken';
-//import dotenv from 'dotenv';
+import config from '../hassanconfig';
 
 const store = new UserStore();
 
@@ -16,7 +16,7 @@ const show = async (_req: Request, res: Response) => {
 };
 const auth = async (_req: Request, res: Response) => {
   const User = await store.authenticate(_req.body.username, _req.body.password);
-  const token = jwt.sign({ User: User }, process.env.JWTSECRIT as string);
+  const token = jwt.sign({ User: User }, config.JWTSECRIT as string);
   res.json(token);
 };
 
@@ -34,7 +34,7 @@ const create = async (_req: Request, res: Response) => {
     };
 
     const newUser = await store.create(User);
-    const token = jwt.sign({ User: newUser }, process.env.JWTSECRIT as string);
+    const token = jwt.sign({ User: newUser }, config.JWTSECRIT as string);
     res.json(token);
   } catch (err) {
     console.log(err);

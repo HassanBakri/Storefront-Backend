@@ -30,21 +30,43 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## Data Shapes
 #### Product
--  id
-- name
-- price
-- [OPTIONAL] category
+- Id SERIAL
+- Name VARCHAR
+- Description text
+- Price FLOAT
+- CreateTime timestamp
+- CreatedBy INT
+- CategoryId INT
+- Available_Items INT
 
 #### User
-- id
-- firstName
-- lastName
-- password
+- Id SERIAL
+- firstname VARCHAR
+- lastname VARCHAR
+- email VARCHAR
+- password VARCHAR
+- CreateDate timestamp
 
 #### Orders
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+- Id SERIAL
+- Total of order (float)
+- UserId int
+- CreateTime datetime
+- Status  of order (active or complete) , varchar
+  
+### OrderProduct
+- Id SERIAL
+- Count int
+- CreateTime datetime
+- UserId int
+- OrderId int
+- ProductId int
+
+### Category
+- Id SERIAL
+- Name varchar
+- Description varchar
+- CreateTime datetime
+- icon varchar
+- CreatedBy int
 
