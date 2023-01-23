@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// psql -h localhost -U full_stack_user -d full_stack_dev
+// psql -h localhost -U shopping_user -d shopping
 //import dotenv from 'dotenv'
 const pg_1 = require("pg");
 const hassanconfig_1 = __importDefault(require("./hassanconfig"));

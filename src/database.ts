@@ -13,8 +13,8 @@ import con from './hassanconfig';
 
 const client = new Pool({
   host: con.POSTGRES_HOST,
-  database:con.POSTGRES_DB,
-  user:con.POSTGRES_USER,
+  database: con.POSTGRES_DB,
+  user: con.POSTGRES_USER,
   password: con.POSTGRES_PASSWORD,
 });
 

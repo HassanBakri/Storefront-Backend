@@ -1,4 +1,3 @@
-import client from '../database';
 import Client from '../database';
 
 export type Category = {

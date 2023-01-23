@@ -7,14 +7,14 @@ export type Order = {
   CreateTime: Date;
   UserId: number;
 };
-export type OrderProduct={
-Id:number;
-Count:number;
-CreateTime:Date;
-UserId:number;
-OrderId:number;
-ProductId:number;
-}
+export type OrderProduct = {
+  Id: number;
+  Count: number;
+  CreateTime: Date;
+  UserId: number;
+  OrderId: number;
+  ProductId: number;
+};
 
 export class OrderStore {
   async index(): Promise<Order[]> {
@@ -79,40 +79,40 @@ export class OrderStore {
       throw new Error(`Could not add new Order by user id ${o.UserId}. Error: ${error}`);
     }
   }
-  
-  async addProduct(quantity: number,userId:string, orderId: string, productId: string): Promise<Order> {
+
+  async addProduct(quantity: number, userId: string, orderId: string, productId: string): Promise<OrderProduct> {
     try {
       //Count UserId OrderId ProductId
-      const sql = 'INSERT INTO OrderProducts (Count, UserId,OrderId, ProductId) VALUES($1, $2, $3,$4) RETURNING *'
+      const sql = 'INSERT INTO OrderProducts (Count, UserId,OrderId, ProductId) VALUES($1, $2, $3,$4) RETURNING *';
       //@ts-ignore
-      const conn = await Client.connect()
+      const conn = await Client.connect();
 
-      const result = await conn.query(sql, [quantity,userId, orderId, productId])
+      const result = await conn.query(sql, [quantity, userId, orderId, productId]);
 
-      const order = result.rows[0]
+      const order = result.rows[0];
 
-      conn.release()
+      conn.release();
 
-      return order
+      return order;
     } catch (err) {
-      throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`)
+      throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`);
     }
   }
   /**
    *- set a product count in current order 'Order/set' [POST] (args: product id, count )
    Id,Count,CreateTime,UserId,OrderId,ProductId
    */
-   async setProductCount (productId:number,count:number,orderId:number): Promise<void> {
+  async setProductCount(productId: number, count: number, orderId: number): Promise<OrderProduct> {
     try {
       const sql = 'Update OrderProduct set Count=$1 where ProductId=$2 and orderid=$3; ';
       // @ts-ignore
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [productId, count, orderId]);
-      result.rows[0];
+      //result.rows[0];
 
       conn.release();
-      //return c;
+      return result.rows[0];
     } catch (error) {
       throw new Error(`Could not set Product ${productId} count  on order ${orderId}. Error: ${error}`);
     }
@@ -120,13 +120,13 @@ export class OrderStore {
   /**
    *    *- Remove a product from current order 'Order/remove' [POST] (args: product id)
    */
-  async removeProduct (productId:number,orderId:number): Promise<void> {
+  async removeProduct(productId: number, orderId: number): Promise<void> {
     try {
       const sql = 'delete * from OrderProduct where  orderid=$2 and ProductId=$1 ; ';
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [productId,  orderId]);
+      const result = await conn.query(sql, [productId, orderId]);
       result.rows[0];
 
       conn.release();
@@ -138,13 +138,13 @@ export class OrderStore {
   /**
    *    *- Checkout checkot the current order 'Order/checkout'[POST]
    */
-  async checkout (status:string,orderId:number): Promise<void> {
+  async checkout(status: string, orderId: number): Promise<void> {
     try {
       const sql = 'update orders set Status= $1 where orderid=$2; ';
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [status,  orderId]);
+      const result = await conn.query(sql, [status, orderId]);
       result.rows[0];
 
       conn.release();

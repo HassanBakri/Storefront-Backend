@@ -11,7 +11,6 @@ export type User = {
   PhoneNumber: String;
 };
 
-
 export class UserStore {
   async index(): Promise<User[]> {
     try {
@@ -78,7 +77,7 @@ export class UserStore {
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [u.FirstName, u.LastName, u.UserName, u.Email, u.PhoneNumber, u.Password,u.id]);
+      const result = await conn.query(sql, [u.FirstName, u.LastName, u.UserName, u.Email, u.PhoneNumber, u.Password, u.id]);
 
       const book = result.rows[0];
 

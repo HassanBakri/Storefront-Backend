@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import port from './hassanconfig'
+import port from './hassanconfig';
 
 const app: express.Application = express();
 const address: string = `0.0.0.0:${port.port}`;

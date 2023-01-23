@@ -50,7 +50,27 @@ class UserStore {
             return book;
         }
         catch (err) {
-            throw new Error(`Could not add new book ${u.Email}. Error: ${err}`);
+            throw new Error(`Could not add new User ${u.Email}. Error: ${err}`);
+        }
+    }
+    async Update(u) {
+        try {
+            const pepper = process.env.BCRYPT_PASSWORD;
+            const saltRounds = parseInt(process.env.SALT_ROUNDS);
+            const salt = bcrypt_1.default.genSaltSync(saltRounds);
+            console.log(salt + '\t' + pepper + '\t' + saltRounds);
+            u.Password = bcrypt_1.default.hashSync(u.Password + pepper, salt);
+            const sql = 'Update Users set FirstName = $1, LastName= $2,UserName=$3,Email=$4,PhoneNumber=$5,Password=$6 where Id=$7  RETURNING *';
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [u.FirstName, u.LastName, u.UserName, u.Email, u.PhoneNumber, u.Password, u.id]);
+            const book = result.rows[0];
+            conn.release();
+            console.log(u.FirstName, u.LastName, u.UserName, u.Email, u.PhoneNumber, u.Password);
+            return book;
+        }
+        catch (err) {
+            throw new Error(`Could not Update user ${u.Email}. Error: ${err}`);
         }
     }
     async delete(id) {
