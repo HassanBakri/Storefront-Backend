@@ -66,7 +66,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Id SERIAL
 - Name varchar
 - Description varchar
-- CreateTime datetime
 - icon varchar
+- CreateTime datetime
 - CreatedBy int
 
