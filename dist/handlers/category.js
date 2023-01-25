@@ -112,6 +112,7 @@ function create(_req, res) {
                     name = _req.body.name;
                     description = _req.body.description;
                     icon = _req.body.icon;
+                    console.log(_req.currentUser);
                     c = {
                         Id: 0,
                         Name: name,
@@ -164,5 +165,6 @@ var Routes = function (app) {
     CategoryRoutes.route('/category')["delete"](destroy);
     CategoryRoutes.route('/category').post(Autherization_1["default"], create);
     app.use(CategoryRoutes);
+    //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJIYXNzYW4iLCJsYXN0bmFtZSI6ImFsbWFra2kiLCJlbWFpbCI6Imhhc3NhbmJha3J5QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJDNmd0JtbTQ2OU5jVFJFQkhNQmNwMi5wYkhKVHNMSUwwR1FKekNsSTVmdFRrN3hnSTdhLkEyIiwiY3JlYXRlZGF0ZSI6IjIwMjMtMDEtMjRUMTU6Mzk6MTMuODE5WiIsInVzZXJuYW1lIjoiaGFzc2FuYmFrcmkiLCJwaG9uZW51bWJlciI6IjA1MzMyMDE2MDEifSwiaWF0IjoxNjc0NTk5MDEzfQ.gEEal5W_95Qd4NDp2GaJZYuqeZkOh4TjU5cL-XmOtRI
 };
 exports["default"] = Routes;

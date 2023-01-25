@@ -17,8 +17,12 @@ var validateToken = function (request, response, next) {
         }
         var token = authorization.split(' ')[1];
         var decodedToken = jsonwebtoken_1["default"].verify(token, hassanconfig_1["default"].JWTSECRIT);
-        console.log(decodedToken);
-        request.currentUser = decodedToken;
+        console.log("verified token" + decodedToken);
+        var dt = jsonwebtoken_1["default"].decode(token);
+        //const cu=(decodedToken as TokenInterface).user;
+        console.log("decoded token ", dt);
+        request.currentUser = dt.User;
+        //request.currentUser=
         //const userId = decodedToken.userId;
         //if (req.body.userId && req.body.userId !== decodedToken. userId) {
         //throw 'Invalid user ID';
@@ -27,6 +31,7 @@ var validateToken = function (request, response, next) {
         //}
     }
     catch (_a) {
+        console.log("Eror happend");
         response.status(401).json({
             error: new Error('Invalid request!')
         });
