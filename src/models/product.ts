@@ -61,7 +61,7 @@ export class ProductStore {
   }
   async Create(p: Product): Promise<Product> {
     try {
-      const sql = 'insert into Product (Name, Description,Price,Available_Items,CreatedBy,CategoryId) values ($1,$2,$3,$4,$5,$6)';
+      const sql = 'insert into Product (Name, Description,Price,Available_Items,CreatedBy,CategoryId) values ($1,$2,$3,$4,$5,$6)   RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -76,7 +76,7 @@ export class ProductStore {
   }
   async Update(p: Product): Promise<Product> {
     try {
-      const sql = 'Update Product set Name=$1 , Description = $2 ,Price = $3, Available_Items = $4 ,CreatedBy = $5,CategoryId=$6 where Id=$7';
+      const sql = 'Update Product set Name=$1 , Description = $2 ,Price = $3, Available_Items = $4 ,CreatedBy = $5,CategoryId=$6 where Id=$7   RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
 

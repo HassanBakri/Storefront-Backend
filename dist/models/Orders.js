@@ -1,257 +1,145 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderStore = void 0;
-var database_1 = __importDefault(require("../database"));
-var OrderStore = /** @class */ (function () {
-    function OrderStore() {
+const database_1 = __importDefault(require("../database"));
+class OrderStore {
+    async getProduct(orderId) {
+        try {
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const sql = 'SELECT * FROM OrderProducts where orderid=$1';
+            const result = await conn.query(sql, [orderId]);
+            conn.release();
+            return result.rows;
+        }
+        catch (err) {
+            throw new Error(`Could not get Order. Error: ${err}`);
+        }
     }
-    OrderStore.prototype.index = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        sql = 'SELECT * FROM Orders';
-                        return [4 /*yield*/, conn.query(sql)];
-                    case 2:
-                        result = _a.sent();
-                        conn.release();
-                        return [2 /*return*/, result.rows];
-                    case 3:
-                        err_1 = _a.sent();
-                        throw new Error("Could not get Order. Error: ".concat(err_1));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OrderStore.prototype.show = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, err_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = 'SELECT * FROM Orders WHERE id=($1)';
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [id])];
-                    case 2:
-                        result = _a.sent();
-                        conn.release();
-                        return [2 /*return*/, result.rows[0]];
-                    case 3:
-                        err_2 = _a.sent();
-                        throw new Error("Could not find Orders ".concat(id, ". Error: ").concat(err_2));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OrderStore.prototype["delete"] = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, book, err_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = 'DELETE FROM Orders WHERE id=($1)';
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [id])];
-                    case 2:
-                        result = _a.sent();
-                        book = result.rows[0];
-                        conn.release();
-                        return [2 /*return*/, book];
-                    case 3:
-                        err_3 = _a.sent();
-                        throw new Error("Could not delete Order ".concat(id, ". Error: ").concat(err_3));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OrderStore.prototype.Create = function (o) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = 'insert into Orders (status, userid,total) values ($1,$2,$3)';
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [o.Status, o.UserId, o.Total])];
-                    case 2:
-                        result = _a.sent();
-                        o = result.rows[0];
-                        conn.release();
-                        return [2 /*return*/, o];
-                    case 3:
-                        error_1 = _a.sent();
-                        throw new Error("Could not add new Order by user id ".concat(o.UserId, ". Error: ").concat(error_1));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    OrderStore.prototype.addProduct = function (quantity, userId, orderId, productId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, order, err_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = 'INSERT INTO OrderProducts (Count, UserId,OrderId, ProductId) VALUES($1, $2, $3,$4) RETURNING *';
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [quantity, userId, orderId, productId])];
-                    case 2:
-                        result = _a.sent();
-                        order = result.rows[0];
-                        conn.release();
-                        return [2 /*return*/, order];
-                    case 3:
-                        err_4 = _a.sent();
-                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, ": ").concat(err_4));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
+    async index() {
+        try {
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const sql = 'SELECT * FROM Orders';
+            const result = await conn.query(sql);
+            conn.release();
+            return result.rows;
+        }
+        catch (err) {
+            throw new Error(`Could not get Order. Error: ${err}`);
+        }
+    }
+    async show(id) {
+        try {
+            const sql = 'SELECT * FROM Orders WHERE id=($1)';
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [id]);
+            conn.release();
+            return result.rows[0];
+        }
+        catch (err) {
+            throw new Error(`Could not find Orders ${id}. Error: ${err}`);
+        }
+    }
+    async delete(id) {
+        try {
+            const sql = 'DELETE FROM Orders WHERE id=($1)';
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [id]);
+            const book = result.rows[0];
+            conn.release();
+            return book;
+        }
+        catch (err) {
+            throw new Error(`Could not delete Order ${id}. Error: ${err}`);
+        }
+    }
+    async Create(o) {
+        try {
+            const sql = 'insert into Orders (status, userid,total) values ($1,$2,$3)  RETURNING *';
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [o.Status, o.UserId, o.Total]);
+            o = result.rows[0];
+            conn.release();
+            return o;
+        }
+        catch (error) {
+            throw new Error(`Could not add new Order by user id ${o.UserId}. Error: ${error}`);
+        }
+    }
+    async addProduct(quantity, userId, orderId, productId) {
+        try {
+            //Count UserId OrderId ProductId
+            const sql = 'INSERT INTO OrderProducts (Count, UserId,OrderId, ProductId) VALUES($1, $2, $3,$4) RETURNING *';
+            //@ts-ignore
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [quantity, userId, orderId, productId]);
+            const order = result.rows[0];
+            conn.release();
+            return order;
+        }
+        catch (err) {
+            throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`);
+        }
+    }
     /**
      *- set a product count in current order 'Order/set' [POST] (args: product id, count )
      Id,Count,CreateTime,UserId,OrderId,ProductId
      */
-    OrderStore.prototype.setProductCount = function (productId, count, orderId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = 'Update OrderProduct set Count=$1 where ProductId=$2 and orderid=$3; ';
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [productId, count, orderId])];
-                    case 2:
-                        result = _a.sent();
-                        //result.rows[0];
-                        conn.release();
-                        return [2 /*return*/, result.rows[0]];
-                    case 3:
-                        error_2 = _a.sent();
-                        throw new Error("Could not set Product ".concat(productId, " count  on order ").concat(orderId, ". Error: ").concat(error_2));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
+    async setProductCount(productId, count, orderId) {
+        try {
+            const sql = 'Update OrderProducts set Count=$1 where ProductId=$2 and orderid=$3 RETURNING *';
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [count, productId, orderId]);
+            //result.rows[0];
+            conn.release();
+            return result.rows[0];
+        }
+        catch (error) {
+            throw new Error(`Could not set Product ${productId} count  on order ${orderId}. Error: ${error}`);
+        }
+    }
     /**
      *    *- Remove a product from current order 'Order/remove' [POST] (args: product id)
      */
-    OrderStore.prototype.removeProduct = function (productId, orderId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, error_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = 'delete * from OrderProduct where  orderid=$2 and ProductId=$1 ; ';
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [productId, orderId])];
-                    case 2:
-                        result = _a.sent();
-                        result.rows[0];
-                        conn.release();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        error_3 = _a.sent();
-                        throw new Error("Could not delete  Product ".concat(productId, "  on order ").concat(orderId, ". Error: ").concat(error_3));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
+    async removeProduct(productId, orderId) {
+        try {
+            const sql = 'delete  from OrderProducts where  orderid=$2 and ProductId=$1 ; ';
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [productId, orderId]);
+            conn.release();
+            result.rows[0];
+            //return c;
+        }
+        catch (error) {
+            throw new Error(`Could not delete  Product ${productId}  on order ${orderId}. Error: ${error}`);
+        }
+    }
     /**
      *    *- Checkout checkot the current order 'Order/checkout'[POST]
      */
-    OrderStore.prototype.checkout = function (status, orderId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, error_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = 'update orders set Status= $1 where orderid=$2; ';
-                        return [4 /*yield*/, database_1["default"].connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [status, orderId])];
-                    case 2:
-                        result = _a.sent();
-                        result.rows[0];
-                        conn.release();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        error_4 = _a.sent();
-                        throw new Error("Could not checkout order ".concat(orderId, ". Error: ").concat(error_4));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return OrderStore;
-}());
+    async checkout(status, orderId) {
+        try {
+            const sql = 'update orders set Status= $1 where id=$2; ';
+            // @ts-ignore
+            const conn = await database_1.default.connect();
+            const result = await conn.query(sql, [status, orderId]);
+            //result.rows[0];
+            conn.release();
+            //return c;
+            return;
+        }
+        catch (error) {
+            throw new Error(`Could not checkout order ${orderId}. Error: ${error}`);
+        }
+    }
+}
 exports.OrderStore = OrderStore;

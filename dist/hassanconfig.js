@@ -2,10 +2,10 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1["default"].config();
-var config = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const config = {
     POSTGRES_HOST: process.env.POSTGRES_HOST,
     POSTGRES_DB: process.env.POSTGRES_DB,
     POSTGRES_USER: process.env.POSTGRES_USER,
@@ -16,6 +16,6 @@ var config = {
     JWTSECRIT: process.env.JWTSECRIT,
     endpoint: process.env.API_URL,
     masterKey: process.env.API_KEY,
-    port: process.env.PORT
+    port: process.env.PORT,
 };
-exports["default"] = config;
+exports.default = config;

@@ -74,11 +74,11 @@ export class Categorytore {
   }
   async Update(c: Category): Promise<Category> {
     try {
-      const sql = 'Update Category set Name=$1, Description=$2,icon=$3,CreatedBy$4 where id= $5';
+      const sql = 'Update Category set Name=$1, Description=$2,icon=$3 where id= $4';
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [c.Name, c.Description, c.icon, c.CreatedBy, c.Id]);
+      const result = await conn.query(sql, [c.Name, c.Description, c.icon, c.Id]);
       c = result.rows[0];
 
       conn.release();

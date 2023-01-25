@@ -17,6 +17,21 @@ export type OrderProduct = {
 };
 
 export class OrderStore {
+  async getProduct(orderId: number) {
+  try {
+      // @ts-ignore
+      const conn = await Client.connect();
+      const sql = 'SELECT * FROM OrderProducts where orderid=$1';
+
+      const result = await conn.query(sql,[orderId]);
+
+      conn.release();
+
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Could not get Order. Error: ${err}`);
+    }
+  }
   async index(): Promise<Order[]> {
     try {
       // @ts-ignore
@@ -66,7 +81,7 @@ export class OrderStore {
   }
   async Create(o: Order): Promise<Order> {
     try {
-      const sql = 'insert into Orders (status, userid,total) values ($1,$2,$3)';
+      const sql = 'insert into Orders (status, userid,total) values ($1,$2,$3)  RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -80,7 +95,7 @@ export class OrderStore {
     }
   }
 
-  async addProduct(quantity: number, userId: string, orderId: string, productId: string): Promise<OrderProduct> {
+  async addProduct(quantity: number, userId: number, orderId: number, productId: number): Promise<OrderProduct> {
     try {
       //Count UserId OrderId ProductId
       const sql = 'INSERT INTO OrderProducts (Count, UserId,OrderId, ProductId) VALUES($1, $2, $3,$4) RETURNING *';
@@ -104,11 +119,11 @@ export class OrderStore {
    */
   async setProductCount(productId: number, count: number, orderId: number): Promise<OrderProduct> {
     try {
-      const sql = 'Update OrderProduct set Count=$1 where ProductId=$2 and orderid=$3; ';
+      const sql = 'Update OrderProducts set Count=$1 where ProductId=$2 and orderid=$3 RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [productId, count, orderId]);
+      const result = await conn.query(sql, [count,productId , orderId]);
       //result.rows[0];
 
       conn.release();
@@ -122,14 +137,14 @@ export class OrderStore {
    */
   async removeProduct(productId: number, orderId: number): Promise<void> {
     try {
-      const sql = 'delete * from OrderProduct where  orderid=$2 and ProductId=$1 ; ';
+      const sql = 'delete  from OrderProducts where  orderid=$2 and ProductId=$1 ; ';
       // @ts-ignore
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [productId, orderId]);
-      result.rows[0];
-
+      
       conn.release();
+      result.rows[0];
       //return c;
     } catch (error) {
       throw new Error(`Could not delete  Product ${productId}  on order ${orderId}. Error: ${error}`);
@@ -140,15 +155,16 @@ export class OrderStore {
    */
   async checkout(status: string, orderId: number): Promise<void> {
     try {
-      const sql = 'update orders set Status= $1 where orderid=$2; ';
+      const sql = 'update orders set Status= $1 where id=$2; ';
       // @ts-ignore
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [status, orderId]);
-      result.rows[0];
+      //result.rows[0];
 
       conn.release();
       //return c;
+      return;
     } catch (error) {
       throw new Error(`Could not checkout order ${orderId}. Error: ${error}`);
     }

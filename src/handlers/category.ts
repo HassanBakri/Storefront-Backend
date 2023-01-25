@@ -13,11 +13,11 @@ const index = async (_req: Request, res: Response) => {
 };
 
 const show = async (_req: Request, res: Response) => {
-  const User = await store.show(_req.body.id);
-  res.json(User);
+  const category = await store.show(_req.params.id);
+  res.json(category);
 };
 const destroy = async (_req: Request, res: Response) => {
-  const deleted = await store.delete(_req.body.id);
+  const deleted = await store.delete(_req.params.id);
   res.json(deleted);
 };
 
@@ -25,7 +25,7 @@ const destroy = async (_req: Request, res: Response) => {
   const name = _req.body.name;
   const description = _req.body.description;
   const icon = _req.body.icon;
-  console.log(_req.currentUser)
+  //console.log(_req.currentUser)
   const c: Category = {
     Id: 0,
     Name: name,
@@ -40,8 +40,8 @@ const destroy = async (_req: Request, res: Response) => {
 
 const update = async (_req: Request, res: Response) => {
   const id = _req.body.id;
-  const name = _req.body.Name;
-  const description = _req.body.Description;
+  const name = _req.body.name;
+  const description = _req.body.description;
   const date = _req.body.date;
   const icon = _req.body.icon;
 
@@ -62,9 +62,9 @@ const CategoryRoutes = Router();
 
 const Routes = (app: express.Application) => {
   CategoryRoutes.route('/category',).get( index);
-  CategoryRoutes.route('/category/{:id}', ).get(show);     
+  CategoryRoutes.route('/category/:id', ).get(show);     
   CategoryRoutes.route('/category',).put( update);
-  CategoryRoutes.route('/category', ).delete(destroy);
+  CategoryRoutes.route('/category/:id', ).delete(destroy);
   CategoryRoutes.route('/category').post(auth,create);
   app.use(CategoryRoutes)
   //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJIYXNzYW4iLCJsYXN0bmFtZSI6ImFsbWFra2kiLCJlbWFpbCI6Imhhc3NhbmJha3J5QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJDNmd0JtbTQ2OU5jVFJFQkhNQmNwMi5wYkhKVHNMSUwwR1FKekNsSTVmdFRrN3hnSTdhLkEyIiwiY3JlYXRlZGF0ZSI6IjIwMjMtMDEtMjRUMTU6Mzk6MTMuODE5WiIsInVzZXJuYW1lIjoiaGFzc2FuYmFrcmkiLCJwaG9uZW51bWJlciI6IjA1MzMyMDE2MDEifSwiaWF0IjoxNjc0NTk5MDEzfQ.gEEal5W_95Qd4NDp2GaJZYuqeZkOh4TjU5cL-XmOtRI

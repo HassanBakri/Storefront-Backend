@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { User, UserStore } from '../models/user';
 import jwt from 'jsonwebtoken';
 import config from '../hassanconfig';
@@ -70,13 +70,16 @@ const destroy = async (_req: Request, res: Response) => {
   res.json(deleted);
 };
 
-const UserRoutes = (app: express.Application) => {
-  app.get('/users', index);
-  app.get('/users/:id', show);
-  app.post('/users/auth', auth);
-  app.post('/users', create);
-  app.put('/users', update);
-  app.delete('/users/:id', destroy);
+const UserRoutes = Router();
+
+const Routes = (app: express.Application) => {
+  UserRoutes.route('/users',).get( index);
+  UserRoutes.route('/users/:id',).get( show);
+  UserRoutes.route('/users/auth',).post( auth);
+  UserRoutes.route('/users', ).post(create);
+  UserRoutes.route('/users',).put(auth, update);
+  UserRoutes.route('/users/:id').delete(auth, destroy);
+  app.use(UserRoutes);
 };
 
-export default UserRoutes;
+export default Routes;
