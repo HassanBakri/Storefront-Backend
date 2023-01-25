@@ -4,14 +4,14 @@ import jwt from 'jsonwebtoken';
 import config from '../hassanconfig';
 
 const store = new UserStore();
-
+//const r=express.Router();
 const index = async (_req: Request, res: Response) => {
   const Users = await store.index();
   res.json(Users);
 };
 
 const show = async (_req: Request, res: Response) => {
-  const User = await store.show(_req.body.id);
+  const User = await store.show(_req.params.id);
   res.json(User);
 };
 const auth = async (_req: Request, res: Response) => {
@@ -29,7 +29,7 @@ const create = async (_req: Request, res: Response) => {
       LastName: _req.body.lastname,
       UserName: _req.body.username,
       Email: _req.body.email,
-      PhoneNumber: _req.body.phnenumber,
+      PhoneNumber: _req.body.phonenumber,
       Password: _req.body.password,
     };
 
@@ -51,7 +51,7 @@ const update = async (_req: Request, res: Response) => {
       LastName: _req.body.lastname,
       UserName: _req.body.username,
       Email: _req.body.email,
-      PhoneNumber: _req.body.phnenumber,
+      PhoneNumber: _req.body.phonenumber,
       Password: _req.body.password,
     };
 
@@ -66,17 +66,17 @@ const update = async (_req: Request, res: Response) => {
 };
 
 const destroy = async (_req: Request, res: Response) => {
-  const deleted = await store.delete(_req.body.id);
+  const deleted = await store.delete(_req.params.id);
   res.json(deleted);
 };
 
 const UserRoutes = (app: express.Application) => {
   app.get('/users', index);
-  app.get('/users/{:id}', show);
+  app.get('/users/:id', show);
   app.post('/users/auth', auth);
   app.post('/users', create);
   app.put('/users', update);
-  app.delete('/users', destroy);
+  app.delete('/users/:id', destroy);
 };
 
 export default UserRoutes;

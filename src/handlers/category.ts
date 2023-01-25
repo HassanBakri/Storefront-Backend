@@ -1,11 +1,15 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response,Router ,Express } from 'express';
 import { Category, Categorytore } from '../models/Category';
+import auth from '../middleware/Autherization'
+
+const routes = express.Router();
+
 
 const store = new Categorytore();
 
 const index = async (_req: Request, res: Response) => {
-  const Users = await store.index();
-  res.json(Users);
+  const categories = await store.index();
+  res.json(categories);
 };
 
 const show = async (_req: Request, res: Response) => {
@@ -17,9 +21,9 @@ const destroy = async (_req: Request, res: Response) => {
   res.json(deleted);
 };
 
-const create = async (_req: Request, res: Response) => {
-  const name = _req.body.Name;
-  const description = _req.body.Description;
+ async function create(_req: Request, res: Response):Promise<void>{
+  const name = _req.body.name;
+  const description = _req.body.description;
   const icon = _req.body.icon;
 
   const c: Category = {
@@ -28,7 +32,7 @@ const create = async (_req: Request, res: Response) => {
     Description: description,
     CreateTime: new Date(),
     icon: icon,
-    CreatedBy: 0,
+    CreatedBy: _req.currentUser.id,
   };
   const nc = await store.Create(c);
   res.json(nc);
@@ -53,12 +57,17 @@ const update = async (_req: Request, res: Response) => {
   res.json(nc);
 };
 
+const CategoryRoutes = Router();
+
+
 const Routes = (app: express.Application) => {
-  app.get('/category', index);
-  app.get('/category/{:id}', show);
-  app.post('/category', create);
-  app.put('/category', update);
-  app.delete('/category', destroy);
+  CategoryRoutes.route('/category',).get( index);
+  CategoryRoutes.route('/category/{:id}', ).get(show);     
+  CategoryRoutes.route('/category',).put( update);
+  CategoryRoutes.route('/category', ).delete(destroy);
+  CategoryRoutes.route('/category').post(auth,create);
+  app.use(CategoryRoutes)
+ 
 };
 
 export default Routes;

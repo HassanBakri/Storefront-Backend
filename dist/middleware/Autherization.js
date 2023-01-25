@@ -2,20 +2,23 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const hassanconfig_1 = __importDefault(require("../hassanconfig"));
-exports = (req, res, next) => {
+exports.__esModule = true;
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var hassanconfig_1 = __importDefault(require("../hassanconfig"));
+var validateToken = function (request, response, next) {
     try {
-        const authorization = req.headers.authorization;
+        var authorization = request.headers.authorization;
+        console.log(authorization);
         if (authorization == null || authorization == undefined) {
-            res.status(401).json({
-                error: new Error('Invalid request!'),
+            response.status(401).json({
+                error: new Error('Invalid request!')
             });
+            return;
         }
-        const token = authorization.split(' ')[1];
-        const decodedToken = jsonwebtoken_1.default.verify(token, hassanconfig_1.default.JWTSECRIT);
+        var token = authorization.split(' ')[1];
+        var decodedToken = jsonwebtoken_1["default"].verify(token, hassanconfig_1["default"].JWTSECRIT);
         console.log(decodedToken);
+        request.currentUser = decodedToken;
         //const userId = decodedToken.userId;
         //if (req.body.userId && req.body.userId !== decodedToken. userId) {
         //throw 'Invalid user ID';
@@ -23,9 +26,10 @@ exports = (req, res, next) => {
         next();
         //}
     }
-    catch {
-        res.status(401).json({
-            error: new Error('Invalid request!'),
+    catch (_a) {
+        response.status(401).json({
+            error: new Error('Invalid request!')
         });
     }
 };
+exports["default"] = validateToken;
