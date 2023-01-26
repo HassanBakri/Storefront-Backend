@@ -46,9 +46,9 @@ class OrderStore {
                 Total: result.rows[0].total,
                 Status: result.rows[0].status,
                 CreateTime: result.rows[0].createtime,
-                UserId: result.rows[0].userid
+                UserId: result.rows[0].userid,
             };
-            console.log("showing Order ", o);
+            console.log('showing Order ', o);
             return o;
         }
         catch (err) {
@@ -61,9 +61,9 @@ class OrderStore {
             // @ts-ignore
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [id]);
-            const book = result.rows[0];
+            const order = result.rows[0];
             conn.release();
-            return book;
+            return order;
         }
         catch (err) {
             throw new Error(`Could not delete Order ${id}. Error: ${err}`);
@@ -146,7 +146,7 @@ class OrderStore {
             const sql = 'update orders set Status= $1 where id=$2; ';
             // @ts-ignore
             const conn = await database_1.default.connect();
-            const result = await conn.query(sql, [status, orderId]);
+            await conn.query(sql, [status, orderId]);
             //result.rows[0];
             conn.release();
             //return c;

@@ -14,8 +14,7 @@ let client;
 console.log('con.ENV value', hassanconfig_1.default.ENV, hassanconfig_1.default.ENV == 'test');
 console.log('con.ENV value', hassanconfig_1.default.ENV + '' === 'test');
 console.log('con.ENV value', hassanconfig_1.default.ENV.valueOf() === 'test');
-if (true) {
-    //con.ENV as string === 'test'
+if (true) { //(con.ENV as string) === 'test'
     client = new pg_1.Pool({
         host: hassanconfig_1.default.POSTGRES_HOST,
         database: hassanconfig_1.default.POSTGRES_TEST_DB,

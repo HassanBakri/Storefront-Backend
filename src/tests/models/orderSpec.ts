@@ -26,7 +26,7 @@ describe('verifing Order model methods exist', () => {
     expect(os.delete).toBeDefined();
   });
 });
- describe('Order Model Tests', () => {
+describe('Order Model Tests', () => {
   const cs = new Categorytore();
   const us = new UserStore();
   const ps = new ProductStore();
@@ -58,26 +58,26 @@ describe('verifing Order model methods exist', () => {
     CategoryId: 0,
     Available_Items: 100,
   };
-  const o:Order={
-      Id: 0,
-      Total: 10000,
-      Status: 'active',
-      CreateTime: new Date(),
-      UserId: 0
-  }
+  const o: Order = {
+    Id: 0,
+    Total: 10000,
+    Status: 'active',
+    CreateTime: new Date(),
+    UserId: 0,
+  };
   it('Create Order function', async () => {
     const nu = await us.show(1);
     if (nu != undefined) {
       category.CreatedBy = nu.id;
       p.CreatedBy = nu.id;
-      o.UserId=nu.id
-      user.id=nu.id
+      o.UserId = nu.id;
+      user.id = nu.id;
     } else {
       const nu = await us.create(user);
       category.CreatedBy = nu.id;
       p.CreatedBy = nu.id;
-      o.UserId=nu.id
-      user.id=nu.id
+      o.UserId = nu.id;
+      user.id = nu.id;
     }
     const mycategory = await cs.show(1);
     if (mycategory != undefined) {
@@ -88,17 +88,16 @@ describe('verifing Order model methods exist', () => {
       category.Id = mycategory.Id;
       p.CategoryId = mycategory.Id;
     }
-    const np= await ps.show(1);
-    if(np!= undefined){
-        //now the product is available
-        p.Id = np.Id;
+    const np = await ps.show(1);
+    if (np != undefined) {
+      //now the product is available
+      p.Id = np.Id;
+    } else {
+      const np = await ps.Create(p);
+      p.Id = np.Id;
     }
-    else{
-        const np = await ps.Create(p);
-        p.Id = np.Id;
-    }
-    const no=await os.Create(o);
-    o.Id=no.Id
+    const no = await os.Create(o);
+    o.Id = no.Id;
     expect(no.Id).toBeGreaterThan(0);
   });
   it('Index', async () => {
@@ -106,20 +105,18 @@ describe('verifing Order model methods exist', () => {
     expect(ol).toBeDefined();
   });
   it('View', async () => {
-    const no =await os.show(o.Id);
+    const no = await os.show(o.Id);
     expect(no).toBeDefined();
   });
   it('Update', async () => {
-  
-
-    await os.checkout("checked",o.Id);
+    await os.checkout('checked', o.Id);
     const no = await os.show(o.Id);
-    
-    expect(( no as Order).Status).toEqual("checked");
+
+    expect((no as Order).Status).toEqual('checked');
   });
   it('Delete', async () => {
     await os.delete(o.Id);
-    const np = await ps.show(p.Id);
+    const np = await os.show(p.Id);
     expect(np).toBeUndefined();
   });
 });

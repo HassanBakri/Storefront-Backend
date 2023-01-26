@@ -47,7 +47,7 @@ export class OrderStore {
       throw new Error(`Could not get Order. Error: ${err}`);
     }
   }
-  async show(id: number): Promise<Order|undefined> {
+  async show(id: number): Promise<Order | undefined> {
     try {
       const sql = 'SELECT * FROM Orders WHERE id=$1';
       // @ts-ignore
@@ -56,15 +56,15 @@ export class OrderStore {
       const result = await conn.query(sql, [id]);
 
       conn.release();
-      if(result.rows[0]== undefined)return undefined
-      const o:Order={
+      if (result.rows[0] == undefined) return undefined;
+      const o: Order = {
         Id: result.rows[0].id,
         Total: result.rows[0].total,
         Status: result.rows[0].status,
         CreateTime: result.rows[0].createtime,
-        UserId: result.rows[0].userid
-      }
-      console.log("showing Order ", o)
+        UserId: result.rows[0].userid,
+      };
+      console.log('showing Order ', o);
       return o;
     } catch (err) {
       throw new Error(`Could not find Orders ${id}. Error: ${err}`);
@@ -78,11 +78,11 @@ export class OrderStore {
 
       const result = await conn.query(sql, [id]);
 
-      const book = result.rows[0];
+      const order = result.rows[0];
 
       conn.release();
 
-      return book;
+      return order;
     } catch (err) {
       throw new Error(`Could not delete Order ${id}. Error: ${err}`);
     }
@@ -100,7 +100,7 @@ export class OrderStore {
       o.Status = result.rows[0].status;
       o.CreateTime = result.rows[0].createtime;
       o.UserId = result.rows[0].userid;
-      console.log(result.rows[0])
+      console.log(result.rows[0]);
       conn.release();
       return o;
     } catch (error) {
@@ -172,7 +172,7 @@ export class OrderStore {
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [status, orderId]);
+      await conn.query(sql, [status, orderId]);
       //result.rows[0];
 
       conn.release();

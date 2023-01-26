@@ -1,4 +1,3 @@
-import supertest from 'supertest';
 import { User, UserStore } from '../../models/user';
 
 describe('verifing User model methods exist', () => {

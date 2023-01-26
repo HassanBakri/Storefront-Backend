@@ -1,4 +1,3 @@
-import supertest from 'supertest';
 import { Category, Categorytore } from '../../models/Category';
 import { User, UserStore } from '../../models/user';
 import { Product, ProductStore } from '../../models/product';

@@ -1,8 +1,8 @@
-import express, { Request, Response, Router, Express } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { Category, Categorytore } from '../models/Category';
 import auth from '../middleware/Autherization';
 
-const routes = express.Router();
+//const routes = express.Router();
 
 const store = new Categorytore();
 

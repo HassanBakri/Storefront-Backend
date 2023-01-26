@@ -58,7 +58,7 @@ class UserStore {
             const conn = await database_1.default.connect();
             //console.log(conn)
             const result = await conn.query(sql, [u.FirstName, u.LastName, u.UserName, u.Email, u.PhoneNumber, u.Password]);
-            const newuser = result.rows[0];
+            //const newuser = result.rows[0];
             conn.release();
             console.log(u.FirstName, u.LastName, u.UserName, u.Email, u.PhoneNumber, u.Password);
             const uy = {

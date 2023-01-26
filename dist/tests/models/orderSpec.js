@@ -60,7 +60,7 @@ describe('Order Model Tests', () => {
         Total: 10000,
         Status: 'active',
         CreateTime: new Date(),
-        UserId: 0
+        UserId: 0,
     };
     it('Create Order function', async () => {
         const nu = await us.show(1);
@@ -109,13 +109,13 @@ describe('Order Model Tests', () => {
         expect(no).toBeDefined();
     });
     it('Update', async () => {
-        await os.checkout("checked", o.Id);
+        await os.checkout('checked', o.Id);
         const no = await os.show(o.Id);
-        expect(no.Status).toEqual("checked");
+        expect(no.Status).toEqual('checked');
     });
     it('Delete', async () => {
         await os.delete(o.Id);
-        const np = await ps.show(p.Id);
+        const np = await os.show(p.Id);
         expect(np).toBeUndefined();
     });
 });
