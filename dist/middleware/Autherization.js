@@ -17,10 +17,10 @@ const validateToken = (request, response, next) => {
         }
         const token = authorization.split(' ')[1];
         const decodedToken = jsonwebtoken_1.default.verify(token, hassanconfig_1.default.JWTSECRIT);
-        console.log("verified token" + decodedToken);
+        console.log('verified token' + decodedToken);
         const dt = jsonwebtoken_1.default.decode(token);
         //const cu=(decodedToken as TokenInterface).user;
-        console.log("decoded token ", dt);
+        console.log('decoded token ', dt);
         request.currentUser = dt.User;
         //request.currentUser=
         //const userId = decodedToken.userId;
@@ -31,7 +31,7 @@ const validateToken = (request, response, next) => {
         //}
     }
     catch {
-        console.log("Eror happend");
+        console.log('Eror happend');
         response.status(401).json({
             error: new Error('Invalid request!'),
         });

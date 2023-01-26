@@ -11,7 +11,7 @@ const index = async (_req: Request, res: Response) => {
 };
 
 const show = async (_req: Request, res: Response) => {
-  const User = await store.show(_req.params.id);
+  const User = await store.show(parseInt(_req.params.id));
   res.json(User);
 };
 const auth = async (_req: Request, res: Response) => {
@@ -73,11 +73,11 @@ const destroy = async (_req: Request, res: Response) => {
 const UserRoutes = Router();
 
 const Routes = (app: express.Application) => {
-  UserRoutes.route('/users',).get( index);
-  UserRoutes.route('/users/:id',).get( show);
-  UserRoutes.route('/users/auth',).post( auth);
-  UserRoutes.route('/users', ).post(create);
-  UserRoutes.route('/users',).put(auth, update);
+  UserRoutes.route('/users').get(index);
+  UserRoutes.route('/users/:id').get(show);
+  UserRoutes.route('/users/auth').post(auth);
+  UserRoutes.route('/users').post(create);
+  UserRoutes.route('/users').put(auth, update);
   UserRoutes.route('/users/:id').delete(auth, destroy);
   app.use(UserRoutes);
 };

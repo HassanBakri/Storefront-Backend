@@ -36,11 +36,11 @@ const index = async (_req, res) => {
     res.json(categories);
 };
 const show = async (_req, res) => {
-    const category = await store.show(_req.params.id);
+    const category = await store.show(parseInt(_req.params.id));
     res.json(category);
 };
 const destroy = async (_req, res) => {
-    const deleted = await store.delete(_req.params.id);
+    const deleted = await store.delete(parseInt(_req.params.id));
     res.json(deleted);
 };
 async function create(_req, res) {
@@ -59,7 +59,6 @@ async function create(_req, res) {
     const nc = await store.Create(c);
     res.json(nc);
 }
-;
 const update = async (_req, res) => {
     const id = _req.body.id;
     const name = _req.body.name;

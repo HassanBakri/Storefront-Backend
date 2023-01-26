@@ -18,12 +18,12 @@ export type OrderProduct = {
 
 export class OrderStore {
   async getProduct(orderId: number) {
-  try {
+    try {
       // @ts-ignore
       const conn = await Client.connect();
       const sql = 'SELECT * FROM OrderProducts where orderid=$1';
 
-      const result = await conn.query(sql,[orderId]);
+      const result = await conn.query(sql, [orderId]);
 
       conn.release();
 
@@ -47,22 +47,30 @@ export class OrderStore {
       throw new Error(`Could not get Order. Error: ${err}`);
     }
   }
-  async show(id: string): Promise<Order> {
+  async show(id: number): Promise<Order|undefined> {
     try {
-      const sql = 'SELECT * FROM Orders WHERE id=($1)';
+      const sql = 'SELECT * FROM Orders WHERE id=$1';
       // @ts-ignore
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);
 
       conn.release();
-
-      return result.rows[0];
+      if(result.rows[0]== undefined)return undefined
+      const o:Order={
+        Id: result.rows[0].id,
+        Total: result.rows[0].total,
+        Status: result.rows[0].status,
+        CreateTime: result.rows[0].createtime,
+        UserId: result.rows[0].userid
+      }
+      console.log("showing Order ", o)
+      return o;
     } catch (err) {
       throw new Error(`Could not find Orders ${id}. Error: ${err}`);
     }
   }
-  async delete(id: string): Promise<Order> {
+  async delete(id: number): Promise<Order> {
     try {
       const sql = 'DELETE FROM Orders WHERE id=($1)';
       // @ts-ignore
@@ -86,8 +94,13 @@ export class OrderStore {
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [o.Status, o.UserId, o.Total]);
-      o = result.rows[0];
 
+      o.Id = result.rows[0].id;
+      o.Total = result.rows[0].total;
+      o.Status = result.rows[0].status;
+      o.CreateTime = result.rows[0].createtime;
+      o.UserId = result.rows[0].userid;
+      console.log(result.rows[0])
       conn.release();
       return o;
     } catch (error) {
@@ -123,7 +136,7 @@ export class OrderStore {
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [count,productId , orderId]);
+      const result = await conn.query(sql, [count, productId, orderId]);
       //result.rows[0];
 
       conn.release();
@@ -142,7 +155,7 @@ export class OrderStore {
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [productId, orderId]);
-      
+
       conn.release();
       result.rows[0];
       //return c;

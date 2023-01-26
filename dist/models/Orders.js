@@ -34,12 +34,22 @@ class OrderStore {
     }
     async show(id) {
         try {
-            const sql = 'SELECT * FROM Orders WHERE id=($1)';
+            const sql = 'SELECT * FROM Orders WHERE id=$1';
             // @ts-ignore
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [id]);
             conn.release();
-            return result.rows[0];
+            if (result.rows[0] == undefined)
+                return undefined;
+            const o = {
+                Id: result.rows[0].id,
+                Total: result.rows[0].total,
+                Status: result.rows[0].status,
+                CreateTime: result.rows[0].createtime,
+                UserId: result.rows[0].userid
+            };
+            console.log("showing Order ", o);
+            return o;
         }
         catch (err) {
             throw new Error(`Could not find Orders ${id}. Error: ${err}`);
@@ -65,7 +75,12 @@ class OrderStore {
             // @ts-ignore
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [o.Status, o.UserId, o.Total]);
-            o = result.rows[0];
+            o.Id = result.rows[0].id;
+            o.Total = result.rows[0].total;
+            o.Status = result.rows[0].status;
+            o.CreateTime = result.rows[0].createtime;
+            o.UserId = result.rows[0].userid;
+            console.log(result.rows[0]);
             conn.release();
             return o;
         }

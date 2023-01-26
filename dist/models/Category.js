@@ -21,12 +21,23 @@ class Categorytore {
     }
     async show(id) {
         try {
-            const sql = 'SELECT * FROM Category WHERE id=($1)';
+            const sql = 'SELECT * FROM Category WHERE id=$1';
             // @ts-ignore
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [id]);
             conn.release();
-            return result.rows[0];
+            console.log('show Result :', result.rows[0]);
+            if (result.rows[0] == undefined)
+                return undefined;
+            const c = {
+                Id: result.rows[0].id,
+                Name: result.rows[0].name,
+                Description: result.rows[0].description,
+                CreateTime: result.rows[0].CreateTime,
+                icon: result.rows[0].icon,
+                CreatedBy: result.rows[0].CreatedBy,
+            };
+            return c;
         }
         catch (err) {
             throw new Error(`Could not find Category ${id}. Error: ${err}`);
@@ -34,7 +45,7 @@ class Categorytore {
     }
     async delete(id) {
         try {
-            const sql = 'DELETE FROM Category WHERE id=($1)';
+            const sql = 'DELETE FROM Category WHERE id=$1';
             // @ts-ignore
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [id]);
@@ -48,13 +59,21 @@ class Categorytore {
     }
     async Create(c) {
         try {
-            const sql = 'insert into Category (Name, Description,icon,CreatedBy) values ($1,$2,$3,$4)';
+            const sql = 'insert into Category (Name, Description,icon,CreatedBy) values ($1,$2,$3,$4)  RETURNING *';
             // @ts-ignore
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [c.Name, c.Description, c.icon, c.CreatedBy]);
-            c = result.rows[0];
+            console.log(result.rows[0]);
             conn.release();
-            return c;
+            const cc = {
+                Id: result.rows[0].id,
+                Name: result.rows[0].name,
+                Description: result.rows[0].description,
+                CreateTime: result.rows[0].createtime,
+                icon: result.rows[0].icon,
+                CreatedBy: result.rows[0].createdby,
+            };
+            return cc;
         }
         catch (error) {
             throw new Error(`Could not add new Category ${c.Name}. Error: ${error}`);
@@ -66,9 +85,10 @@ class Categorytore {
             // @ts-ignore
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [c.Name, c.Description, c.icon, c.Id]);
-            c = result.rows[0];
+            console.log('after updating category  ', c.Name, result.rows[0]);
             conn.release();
-            return c;
+            const cc = (await this.show(c.Id));
+            return cc;
         }
         catch (error) {
             throw new Error(`Could not Update Category ${c.Name}. Error: ${error}`);

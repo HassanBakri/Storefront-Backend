@@ -5,28 +5,43 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index  'products/' [GET]
-- Show   'products/:id [GET]
-- Create 'products [POST] (args: Product model as per scheme)
-- Update 'products [PUT]  (args: Product model as per scheme)
-- Delete 'products/:id' [DELETE]
-- [OPTIONAL] Top 5 most popular products 
-- [OPTIONAL] Products by category (args: product category)
+- Index  'product/'     [GET]
+- Show   'product/:id   [GET]
+- Update '' [PUT]
+- Create 'product       [POST]  [token required]    (args: name:string, description:string,price:number,available_Items:number)
+- Update 'product       [PUT]   [token required]    (args: id:number ,name:string, description:string,price:number,available_Items:number)
+- Delete 'product/:id'  [DELETE][token required]
+- ~[OPTIONAL] Top 5 most popular products ~
+- ~[OPTIONAL] Products by category (args: product category)~
+
+#### Category
+- Index  'category'        [GET]
+- Show   'category/:id'    [GET]
+- Update 'category'        [PUT]    (args:  id:number,name:string,description:string,icon:string)
+- Create 'category'        [POST]      [token required] (args:  name:string,description:string,icon:string)
+- Delete 'category/:id'    [Delete]    [token required]
+  
 
 #### Users
-- Index 'Users/' [GET] [token required]
-- Show 'Users/' [GET]  [token required]
-- Create 'Users/' [GET] (args: Users model as per scheme)[token required]
-- Update 'Users [PUT]  (args: Users model as per scheme)
-- Delete 'Users/:id' [DELETE]
+- Index 'users/'    [GET] 
+- Show 'users/:id'  [GET] 
+- Create 'Users/'   [POST]   [token required] (args: username:string,firstname:string,lastname:string,email:string,phonenumber:string)
+- Update 'Users'    [PUT]    [token required] (args: id:number,username:string,firstname:string,lastname:string,email:string,phonenumber:string)
+- Delete 'Users/:id'[DELETE] [token required]
+- auth 'Users/auth' [POST] (args: username:string,password:string)
 
 #### Orders
-- Show Current Order by user 'Order/' [GET][token required]
-- Add a product to current order 'Order/add' [POST] (args: product id, count defult is 1)
-- set a product count in current order 'Order/set' [POST] (args: product id, count )
-- Remove a product from current order 'Order/remove' [POST] (args: product id)
-- Checkout checkot the current order 'Order/checkout'[POST]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Index  'order'        [GET]
+- Show   'order/:id'    [GET]
+- Create 'order'        [POST]      [token required]
+- Delete 'order/:id'    [Delete]    [token required]
+- 
+- Add product to order 'order/:id/addProduct' [POST]    [token required]   (args: quantity:number, productId:number,orderId:number)
+- Show Order Products 'order/:id/getProducts' [post]    [token required]    (args: productId:number,quantity:number,orderId:number)
+- set product count in order 'order/setProductCount'    [POST] (args: product id, count )
+- Remove product from order 'order/removeProduct'       [POST] [token required](args: productId:number,orderId:number)
+- Checkout order 'order/checkout'                       [POST] [token required]
+- ~[OPTIONAL] Completed Orders by user (args: user id)[token required]~
 
 ## Data Shapes
 #### Product
@@ -43,7 +58,8 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Id SERIAL
 - firstname VARCHAR
 - lastname VARCHAR
-- email VARCHAR
+- username VARCHAR
+- email VARCHAR UNIQE
 - password VARCHAR
 - CreateDate timestamp
 
@@ -52,7 +68,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Total of order (float)
 - UserId int
 - CreateTime datetime
-- Status  of order (active or complete) , varchar
+- Status  of order (active or checked) , varchar
   
 ### OrderProduct
 - Id SERIAL

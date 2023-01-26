@@ -12,11 +12,11 @@ const index = async (_req, res) => {
     res.json(o);
 };
 const show = async (_req, res) => {
-    const o = await store.show(_req.params.id);
+    const o = await store.show(parseInt(_req.params.id));
     res.json(o);
 };
 const destroy = async (_req, res) => {
-    const deleted = await store.delete(_req.params.id);
+    const deleted = await store.delete(parseInt(_req.params.id));
     res.json(deleted);
 };
 const create = async (_req, res) => {

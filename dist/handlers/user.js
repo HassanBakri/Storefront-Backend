@@ -14,7 +14,7 @@ const index = async (_req, res) => {
     res.json(Users);
 };
 const show = async (_req, res) => {
-    const User = await store.show(_req.params.id);
+    const User = await store.show(parseInt(_req.params.id));
     res.json(User);
 };
 const auth = async (_req, res) => {

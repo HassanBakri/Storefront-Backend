@@ -27,22 +27,31 @@ export class ProductStore {
       throw new Error(`Could not get Product. Error: ${err}`);
     }
   }
-  async show(id: string): Promise<Product> {
+  async show(id: number): Promise<Product> {
     try {
-      const sql = 'SELECT * FROM Product WHERE id=($1)';
+      const sql = 'SELECT * FROM Product WHERE id=$1';
       // @ts-ignore
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);
 
       conn.release();
-
+      //   const p:Product={
+      //     Id: result.rows[0].,
+      //     Name: result.rows[0],
+      //     Description: result.rows[0],
+      //     Price: result.rows[0],
+      //     CreateTime: result.rows[0],
+      //     CreatedBy: result.rows[0],
+      //     CategoryId: result.rows[0],
+      //     Available_Items: result.rows[0]
+      // }
       return result.rows[0];
     } catch (err) {
       throw new Error(`Could not find Product ${id}. Error: ${err}`);
     }
   }
-  async delete(id: string): Promise<Product> {
+  async delete(id: number): Promise<Product> {
     try {
       const sql = 'DELETE FROM Product WHERE id=($1)';
       // @ts-ignore
@@ -61,14 +70,23 @@ export class ProductStore {
   }
   async Create(p: Product): Promise<Product> {
     try {
+      console.log('before inserting product :', p.Name, p.Description, p.Price, p.Available_Items, p.CreatedBy, p.CategoryId);
       const sql = 'insert into Product (Name, Description,Price,Available_Items,CreatedBy,CategoryId) values ($1,$2,$3,$4,$5,$6)   RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [p.Name, p.Description, p.Price, p.Available_Items, p.CreatedBy, p.CategoryId]);
       p = result.rows[0];
-
+      console.log('Result value', result.rows[0]);
+      console.log('P value', p.Name, p.Description, p.Price, p.Available_Items, p.CreatedBy, p.CategoryId);
       conn.release();
+      p.Id = result.rows[0].id;
+      p.Name = result.rows[0].name;
+      p.Description = result.rows[0].description;
+      p.Price = result.rows[0].price;
+      p.Available_Items = result.rows[0].available_items;
+      p.CreatedBy = result.rows[0].createdby;
+      p.CategoryId = result.rows[0].categoryid;
       return p;
     } catch (error) {
       throw new Error(`Could not add new Product ${p.Name}. Error: ${error}`);
@@ -81,8 +99,15 @@ export class ProductStore {
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [p.Name, p.Description, p.Price, p.Available_Items, p.CreatedBy, p.CategoryId, p.Id]);
-      p = result.rows[0];
-
+      //p = result.rows[0];
+      console.log('after updating product', result.rows[0]);
+      p.Id = result.rows[0].id;
+      p.Name = result.rows[0].name;
+      p.Description = result.rows[0].description;
+      p.Price = result.rows[0].price;
+      p.Available_Items = result.rows[0].available_items;
+      p.CreatedBy = result.rows[0].createdby;
+      p.CategoryId = result.rows[0].categoryid;
       conn.release();
       return p;
     } catch (error) {

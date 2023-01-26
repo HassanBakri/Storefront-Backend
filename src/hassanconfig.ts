@@ -9,8 +9,7 @@ const config = {
   BCRYPT_PASSWORD: process.env.BCRYPT_PASSWORD,
   SALT_ROUNDS: process.env.SALT_ROUNDS,
   JWTSECRIT: process.env.JWTSECRIT,
-  endpoint: process.env.API_URL,
-  masterKey: process.env.API_KEY,
+  ENV: process.env.ENV,
   port: process.env.PORT,
 };
 export default config;
