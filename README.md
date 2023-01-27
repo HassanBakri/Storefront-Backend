@@ -3,6 +3,21 @@
 ### **1- The Database**
 
 *   The project requires two databases to be created. One for development and the other for testing. (shopping and shopping\_test )
+
+1.  Creating databases “shopping” and "shopping\_test": using `psql` with privileged user run the following SQL quires 
+
+```plaintext
+CREATE USER shopping_user WITH PASSWORD 'password123';
+CREATE DATABASE shopping;
+CREATE DATABASE shopping_test;
+
+GRANT ALL PRIVILEGES ON DATABASE shopping TO shopping_user;
+GRANT ALL PRIVILEGES ON DATABASE shopping_test TO shopping_user;
+
+ALTER DATABASE shopping OWNER TO shopping_user;
+ALTER DATABASE shopping_test OWNER TO shopping_user;
+```
+
 *   The `**db-migrate**`tool requires a database user can run DDL (Data Definition Language) i.e. create , drop, and alter, since we will run migrations.
 
 ### **2- The Project**
@@ -31,7 +46,7 @@ JWTSECRIT=#########
 port=3000
 ```
 
-*   `**db-migrate**` tool requires a database.json describing dev, test environments , proper file will look like below 
+*   `**db-migrate**` tool requires a database.json describing dev, test environments , proper file will look like below
 
 ```plaintext
 {
@@ -40,14 +55,14 @@ port=3000
       "host": "127.0.0.1",
       "database": "shopping",
       "user": "shopping_user",
-      "password": "#######"
+      "password": "password123"
     },
     "test": {
       "driver": "pg",
       "host": "127.0.0.1",
       "database": "shopping_test",
       "user": "shopping_user",
-      "password": "######"
+      "password": "password123"
     },
     "sql-file" : true
 }
