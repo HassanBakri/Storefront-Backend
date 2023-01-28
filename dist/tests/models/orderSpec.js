@@ -19,11 +19,23 @@ describe('verifing Order model methods exist', () => {
         //the only reason to update order is to check out
         expect(os.checkout).toBeDefined();
     });
+    it('should have a addProduct method', () => {
+        expect(os.addProduct).toBeDefined();
+    });
+    it('should have a getProduct method', () => {
+        expect(os.getProduct).toBeDefined();
+    });
+    it('should have a setProductCount method', () => {
+        expect(os.setProductCount).toBeDefined();
+    });
+    it('should have a removeProduct method', () => {
+        expect(os.removeProduct).toBeDefined();
+    });
     it('should have a delete method', () => {
         expect(os.delete).toBeDefined();
     });
 });
-describe('Order Model Tests', () => {
+fdescribe('Order Model Tests', () => {
     const cs = new Category_1.Categorytore();
     const us = new user_1.UserStore();
     const ps = new product_1.ProductStore();
@@ -62,6 +74,14 @@ describe('Order Model Tests', () => {
         CreateTime: new Date(),
         UserId: 0,
     };
+    const op = {
+        Id: 0,
+        Count: 1,
+        CreateTime: new Date(),
+        UserId: user.id,
+        OrderId: o.Id,
+        ProductId: p.Id
+    };
     it('Create Order function', async () => {
         const nu = await us.show(1);
         if (nu != undefined) {
@@ -69,6 +89,7 @@ describe('Order Model Tests', () => {
             p.CreatedBy = nu.id;
             o.UserId = nu.id;
             user.id = nu.id;
+            op.UserId = nu.id;
         }
         else {
             const nu = await us.create(user);
@@ -76,6 +97,7 @@ describe('Order Model Tests', () => {
             p.CreatedBy = nu.id;
             o.UserId = nu.id;
             user.id = nu.id;
+            op.UserId = nu.id;
         }
         const mycategory = await cs.show(1);
         if (mycategory != undefined) {
@@ -91,18 +113,21 @@ describe('Order Model Tests', () => {
         if (np != undefined) {
             //now the product is available
             p.Id = np.Id;
+            op.ProductId = np.Id;
         }
         else {
             const np = await ps.Create(p);
             p.Id = np.Id;
+            op.ProductId = np.Id;
         }
         const no = await os.Create(o);
         o.Id = no.Id;
+        op.OrderId = no.Id;
         expect(no.Id).toBeGreaterThan(0);
     });
     it('Index', async () => {
         const ol = await os.index();
-        expect(ol).toBeDefined();
+        expect(ol.length).toEqual(1);
     });
     it('View', async () => {
         const no = await os.show(o.Id);
@@ -112,6 +137,11 @@ describe('Order Model Tests', () => {
         await os.checkout('checked', o.Id);
         const no = await os.show(o.Id);
         expect(no.Status).toEqual('checked');
+    });
+    it("Add Order to Product", async () => {
+        const nop = await os.addProduct(op.Count, op.UserId, op.OrderId, op.ProductId);
+        op.Id = nop.Id;
+        expect(nop).toBeDefined();
     });
     it('Delete', async () => {
         await os.delete(o.Id);

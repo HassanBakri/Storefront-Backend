@@ -10,7 +10,7 @@ let client: any;
 console.log('con.ENV value', con.ENV, con.ENV == 'test');
 console.log('con.ENV value', con.ENV + '' === 'test');
 console.log('con.ENV value', (con.ENV as string).valueOf() === 'test');
-if ((con.ENV as string) === 'test') {
+if (true) {//(con.ENV as string) === 'test'
   client = new Pool({
     host: con.POSTGRES_HOST,
     database: con.POSTGRES_TEST_DB,

@@ -17,7 +17,7 @@ export type OrderProduct = {
 };
 
 export class OrderStore {
-  async getProduct(orderId: number) {
+  async getProduct(orderId: number) :Promise<OrderProduct[]>{
     try {
       // @ts-ignore
       const conn = await Client.connect();
