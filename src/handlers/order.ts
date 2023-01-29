@@ -22,10 +22,10 @@ const index = async (_req: Request, res: Response) => {
 };
 
 const show = async (_req: Request, res: Response) => {
-  if(!parseInt(_req.params.id)){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!parseInt(_req.params.id)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
   const o = await store.show(parseInt(_req.params.id)).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${show.name} Endpoint`);
@@ -42,10 +42,10 @@ const show = async (_req: Request, res: Response) => {
   res.json(o);
 };
 const destroy = async (_req: Request, res: Response) => {
-  if(!parseInt(_req.params.id)){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!parseInt(_req.params.id)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
   const deleted = await store.delete(parseInt(_req.params.id)).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${destroy.name} Endpoint`);
@@ -91,11 +91,11 @@ const addProduct = async (_req: Request, res: Response) => {
   const orderId: number = _req.body.orderId as number;
   const userId: number = _req.currentUser.id as number;
 
-  if(!_req.body.productId||!_req.body.quantity||!_req.body.orderId||isNaN(orderId)||isNaN(quantity)||isNaN(orderId)){
-    res.status(400)
-      res.json({"status":" improper request "})
-      return
-    }
+  if (!_req.body.productId || !_req.body.quantity || !_req.body.orderId || isNaN(orderId) || isNaN(quantity) || isNaN(orderId)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
+  }
 
   const po = await store.addProduct(quantity, userId, orderId, productId).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${addProduct.name} Endpoint`);
@@ -116,15 +116,14 @@ const setProductCount = async (_req: Request, res: Response) => {
   const productId = _req.body.productId;
   const quantity = _req.body.quantity;
   const orderId = _req.body.orderId;
- 
-  if(!_req.body.productId||!_req.body.quantity||!_req.body.orderId||isNaN(productId)||isNaN(quantity)||isNaN(orderId)){
-    res.status(400)
-      res.json({"status":" improper request "})
-      return
-    }
+
+  if (!_req.body.productId || !_req.body.quantity || !_req.body.orderId || isNaN(productId) || isNaN(quantity) || isNaN(orderId)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
+  }
 
   const po = await store.setProductCount(productId, quantity, orderId).catch((err: Error) => {
-    
     console.log(`Error in ${__filename} in ${setProductCount.name} Endpoint`);
     console.log(err.message);
     res.status(500);
@@ -138,14 +137,14 @@ const setProductCount = async (_req: Request, res: Response) => {
   }); //userId
   res.json(po);
 };
-const getProduct = async (_req: Request, res: Response) => {  
-  if(!parseInt(_req.params.id)||isNaN(parseInt(_req.params.id))){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+const getProduct = async (_req: Request, res: Response) => {
+  if (!parseInt(_req.params.id) || isNaN(parseInt(_req.params.id))) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
   const orderId: number = parseInt(_req.params.id);
-  
+
   const po = await store.getProduct(orderId).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${getProduct.name} Endpoint`);
     console.log(err.message);
@@ -166,11 +165,11 @@ const removeProduct = async (_req: Request, res: Response) => {
   //const quantity=_req.body.quantity;
   const orderId: number = parseInt(_req.body.orderId);
 
-  if(!_req.body.productId||!_req.body.orderId||isNaN(_req.body.productId)||isNaN(_req.body.orderId)){
-    res.status(400)
-      res.json({"status":" improper request "})
-      return
-    }
+  if (!_req.body.productId || !_req.body.orderId || isNaN(_req.body.productId) || isNaN(_req.body.orderId)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
+  }
   await store.removeProduct(productId, orderId).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${removeProduct.name} Endpoint`);
     console.log(err.message);
@@ -187,14 +186,14 @@ const removeProduct = async (_req: Request, res: Response) => {
 };
 //  async checkout (status:string,orderId:number): Promise<void> {
 const checkout = async (_req: Request, res: Response) => {
-  console.log("checkout called")
+  console.log('checkout called');
   const orderId = parseInt(_req.body.orderId);
-  if(!orderId||isNaN(orderId)){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!orderId || isNaN(orderId)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
-  console.log("passed validation")
+  console.log('passed validation');
 
   await store.checkout('checkedout', orderId).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${checkout.name} Endpoint`);
@@ -208,7 +207,7 @@ const checkout = async (_req: Request, res: Response) => {
       return;
     }
   });
-  console.log("exiting checkout")
+  console.log('exiting checkout');
   res.status(200);
   res.json({});
 };

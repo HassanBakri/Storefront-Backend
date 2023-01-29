@@ -22,10 +22,10 @@ const index = async (_req: Request, res: Response) => {
 };
 
 const show = async (_req: Request, res: Response) => {
-  if(!parseInt(_req.params.id)){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!parseInt(_req.params.id)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
   const p = await store.show(parseInt(_req.params.id)).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${show.name} Endpoint`);
@@ -42,10 +42,10 @@ const show = async (_req: Request, res: Response) => {
   res.json(p);
 };
 const destroy = async (_req: Request, res: Response) => {
-  if(!parseInt(_req.params.id)){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!parseInt(_req.params.id)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
   const deleted = await store.delete(parseInt(_req.params.id)).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${destroy.name} Endpoint`);
@@ -71,12 +71,11 @@ const create = async (_req: Request, res: Response) => {
   const CreatedBy = _req.currentUser.id;
   const CategoryId = _req.body.categoryId;
   const Available_Items = _req.body.available_Items;
-  if(!Name||!Description||isNaN(Price)||isNaN(CategoryId)||!Available_Items ||!(Price)||!(CategoryId)){
-
-    res.status(400)
-      res.json({"status":" improper request "})
-      return
-    }
+  if (!Name || !Description || isNaN(Price) || isNaN(CategoryId) || !Available_Items || !Price || !CategoryId) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
+  }
   const p: Product = {
     Id: Id,
     Name: Name,
@@ -112,11 +111,11 @@ const update = async (_req: Request, res: Response) => {
   const CategoryId = _req.body.categoryId;
   const Available_Items = _req.body.available_Items;
 
-  if(!Name||!Description||isNaN(Price)||isNaN(Id)||isNaN(CategoryId)||!Available_Items ||!(Price)||!(Id)||!(CategoryId)){
-    res.status(400)
-      res.json({"status":" improper request "})
-      return
-    }
+  if (!Name || !Description || isNaN(Price) || isNaN(Id) || isNaN(CategoryId) || !Available_Items || !Price || !Id || !CategoryId) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
+  }
 
   const p: Product = {
     Id: Id,

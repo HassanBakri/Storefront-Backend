@@ -3,7 +3,6 @@ import { Category, Categorytore } from '../models/Category';
 import auth from '../middleware/Autherization';
 import conf from '../hassanconfig';
 
-
 const store = new Categorytore();
 
 const index = async (_req: Request, res: Response) => {
@@ -23,10 +22,10 @@ const index = async (_req: Request, res: Response) => {
 };
 
 const show = async (_req: Request, res: Response) => {
-  if(!parseInt(_req.params.id)){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!parseInt(_req.params.id)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
   const category = await store.show(parseInt(_req.params.id)).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${show.name} Endpoint`);
@@ -43,10 +42,10 @@ const show = async (_req: Request, res: Response) => {
   res.json(category);
 };
 const destroy = async (_req: Request, res: Response) => {
-  if(!parseInt(_req.params.id)){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!parseInt(_req.params.id)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
   const deleted = await store.delete(parseInt(_req.params.id)).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${destroy.name} Endpoint`);
@@ -68,10 +67,10 @@ async function create(_req: Request, res: Response): Promise<void> {
   const description = _req.body.description;
   const icon = _req.body.icon;
 
-  if(!name||!description||!icon){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!name || !description || !icon) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
 
   const c: Category = {
@@ -103,10 +102,10 @@ const update = async (_req: Request, res: Response) => {
   const description = _req.body.description;
   const date = _req.body.date;
   const icon = _req.body.icon;
-  if(!name||!description||!icon||!id){
-    res.status(400)
-    res.json({"status":" improper request "})
-    return
+  if (!name || !description || !icon || !id) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
   }
   const c: Category = {
     Id: id,
@@ -140,7 +139,6 @@ const Routes = (app: express.Application) => {
   CategoryRoutes.route('/category/:id').delete(destroy);
   CategoryRoutes.route('/category').post(auth, create);
   app.use(CategoryRoutes);
-
 };
 
 export default Routes;

@@ -168,14 +168,14 @@ export class OrderStore {
    */
   async checkout(status: string, orderId: number): Promise<void> {
     try {
-      console.log("sending sql : update orders set Status= $1 where id=$2;")
+      console.log('sending sql : update orders set Status= $1 where id=$2;');
 
       const sql = 'update orders set Status= $1 where id=$2; ';
       // @ts-ignore
       const conn = await Client.connect();
 
       await conn.query(sql, [status, orderId]);
-      console.log("query executed")
+      console.log('query executed');
       //result.rows[0];
 
       conn.release();
