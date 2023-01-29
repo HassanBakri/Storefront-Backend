@@ -17,7 +17,7 @@ export type OrderProduct = {
 };
 
 export class OrderStore {
-  async getProduct(orderId: number) :Promise<OrderProduct[]>{
+  async getProduct(orderId: number): Promise<OrderProduct[]> {
     try {
       // @ts-ignore
       const conn = await Client.connect();
@@ -117,13 +117,13 @@ export class OrderStore {
 
       const result = await conn.query(sql, [quantity, userId, orderId, productId]);
 
-      const order = result.rows[0];
+      const order: OrderProduct = result.rows[0];
 
       conn.release();
 
       return order;
     } catch (err) {
-      throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`);
+      throw new Error(`Could not add product ${productId} to order ${orderId}\n ${err}`);
     }
   }
   /**
@@ -168,11 +168,14 @@ export class OrderStore {
    */
   async checkout(status: string, orderId: number): Promise<void> {
     try {
+      console.log("sending sql : update orders set Status= $1 where id=$2;")
+
       const sql = 'update orders set Status= $1 where id=$2; ';
       // @ts-ignore
       const conn = await Client.connect();
 
       await conn.query(sql, [status, orderId]);
+      console.log("query executed")
       //result.rows[0];
 
       conn.release();

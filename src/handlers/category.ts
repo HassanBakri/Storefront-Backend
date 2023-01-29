@@ -1,22 +1,65 @@
 import express, { Request, Response, Router } from 'express';
 import { Category, Categorytore } from '../models/Category';
 import auth from '../middleware/Autherization';
+import conf from '../hassanconfig';
 
-//const routes = express.Router();
 
 const store = new Categorytore();
 
 const index = async (_req: Request, res: Response) => {
-  const categories = await store.index();
+  const categories = await store.index().catch((err: Error) => {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err.message);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
+  });
   res.json(categories);
 };
 
 const show = async (_req: Request, res: Response) => {
-  const category = await store.show(parseInt(_req.params.id));
+  if(!parseInt(_req.params.id)){
+    res.status(400)
+    res.json({"status":" improper request "})
+    return
+  }
+  const category = await store.show(parseInt(_req.params.id)).catch((err: Error) => {
+    console.log(`Error in ${__filename} in ${show.name} Endpoint`);
+    console.log(err.message);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
+  });
   res.json(category);
 };
 const destroy = async (_req: Request, res: Response) => {
-  const deleted = await store.delete(parseInt(_req.params.id));
+  if(!parseInt(_req.params.id)){
+    res.status(400)
+    res.json({"status":" improper request "})
+    return
+  }
+  const deleted = await store.delete(parseInt(_req.params.id)).catch((err: Error) => {
+    console.log(`Error in ${__filename} in ${destroy.name} Endpoint`);
+    console.log(err.message);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
+  });
   res.json(deleted);
 };
 
@@ -24,7 +67,13 @@ async function create(_req: Request, res: Response): Promise<void> {
   const name = _req.body.name;
   const description = _req.body.description;
   const icon = _req.body.icon;
-  //console.log(_req.currentUser)
+
+  if(!name||!description||!icon){
+    res.status(400)
+    res.json({"status":" improper request "})
+    return
+  }
+
   const c: Category = {
     Id: 0,
     Name: name,
@@ -33,7 +82,18 @@ async function create(_req: Request, res: Response): Promise<void> {
     icon: icon,
     CreatedBy: _req.currentUser.id,
   };
-  const nc = await store.Create(c);
+  const nc = await store.Create(c).catch((err: Error) => {
+    console.log(`Error in ${__filename} in ${create.name} Endpoint`);
+    console.log(err.message);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
+  });
   res.json(nc);
 }
 
@@ -43,7 +103,11 @@ const update = async (_req: Request, res: Response) => {
   const description = _req.body.description;
   const date = _req.body.date;
   const icon = _req.body.icon;
-
+  if(!name||!description||!icon||!id){
+    res.status(400)
+    res.json({"status":" improper request "})
+    return
+  }
   const c: Category = {
     Id: id,
     Name: name,
@@ -52,7 +116,18 @@ const update = async (_req: Request, res: Response) => {
     icon: icon,
     CreatedBy: 0,
   };
-  const nc = await store.Update(c);
+  const nc = await store.Update(c).catch((err: Error) => {
+    console.log(`Error in ${__filename} in ${update.name} Endpoint`);
+    console.log(err.message);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
+  });
   res.json(nc);
 };
 
@@ -65,7 +140,7 @@ const Routes = (app: express.Application) => {
   CategoryRoutes.route('/category/:id').delete(destroy);
   CategoryRoutes.route('/category').post(auth, create);
   app.use(CategoryRoutes);
-  //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJIYXNzYW4iLCJsYXN0bmFtZSI6ImFsbWFra2kiLCJlbWFpbCI6Imhhc3NhbmJha3J5QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJDNmd0JtbTQ2OU5jVFJFQkhNQmNwMi5wYkhKVHNMSUwwR1FKekNsSTVmdFRrN3hnSTdhLkEyIiwiY3JlYXRlZGF0ZSI6IjIwMjMtMDEtMjRUMTU6Mzk6MTMuODE5WiIsInVzZXJuYW1lIjoiaGFzc2FuYmFrcmkiLCJwaG9uZW51bWJlciI6IjA1MzMyMDE2MDEifSwiaWF0IjoxNjc0NTk5MDEzfQ.gEEal5W_95Qd4NDp2GaJZYuqeZkOh4TjU5cL-XmOtRI
+
 };
 
 export default Routes;

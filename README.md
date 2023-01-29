@@ -19,7 +19,7 @@ ALTER DATABASE shopping_test OWNER TO shopping_user;
 ```
 
 *   The `**db-migrate**`tool requires a database user can run DDL (Data Definition Language) i.e. create , drop, and alter, since we will run migrations.
-
+* The project uses Postgres as DBMS, which is defined in `docker-compose.yml` file ,and it's configued to run on port `5432`   
 ### **2- The Project**
 
 **to run the project. Follow the following steps:**

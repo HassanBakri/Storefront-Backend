@@ -11,10 +11,10 @@ const hassanconfig_1 = __importDefault(require("./hassanconfig"));
 //import dotenv from 'dotenv'
  */
 let client;
-console.log('con.ENV value', hassanconfig_1.default.ENV, hassanconfig_1.default.ENV == 'test');
-console.log('con.ENV value', hassanconfig_1.default.ENV + '' === 'test');
-console.log('con.ENV value', hassanconfig_1.default.ENV.valueOf() === 'test');
-if (true) { //(con.ENV as string) === 'test'
+// console.log('con.ENV value', con.ENV, (con.ENV )as string == "test");
+// console.log('con.ENV value', con.ENV + '' === 'test');
+// console.log('con.ENV value', (con.ENV as string).valueOf() === 'test');
+if (hassanconfig_1.default.ENV === 'test') {
     client = new pg_1.Pool({
         host: hassanconfig_1.default.POSTGRES_HOST,
         database: hassanconfig_1.default.POSTGRES_TEST_DB,

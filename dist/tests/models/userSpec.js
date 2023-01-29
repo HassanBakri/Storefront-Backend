@@ -55,17 +55,17 @@ describe('User Model Tests', () => {
         const nu = await us.Update(user);
         expect(nu.FirstName).toEqual(user.FirstName);
     });
-    it("Authenticate", async () => {
-        const u = await us.authenticate(user.UserName, "123456");
+    it('Authenticate', async () => {
+        const u = await us.authenticate(user.UserName, '123456');
         expect(u).toBeDefined();
     });
-    it("Authenticate with false password", async () => {
-        const u = await us.authenticate(user.UserName, "1234567");
+    it('Authenticate with false password', async () => {
+        const u = await us.authenticate(user.UserName, '1234567');
         expect(u).toBeNull();
     });
-    it("Set Password", async () => {
-        await us.setPassword(user.id, "1234567");
-        const u = await us.authenticate(user.UserName, "1234567");
+    it('Set Password', async () => {
+        await us.setPassword(user.id, '1234567');
+        const u = await us.authenticate(user.UserName, '1234567');
         expect(u).toBeDefined();
     });
     it('Delete', async () => {

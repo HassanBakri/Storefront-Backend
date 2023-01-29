@@ -80,7 +80,7 @@ fdescribe('Order Model Tests', () => {
         CreateTime: new Date(),
         UserId: user.id,
         OrderId: o.Id,
-        ProductId: p.Id
+        ProductId: p.Id,
     };
     it('Create Order function', async () => {
         const nu = await us.show(1);
@@ -138,7 +138,7 @@ fdescribe('Order Model Tests', () => {
         const no = await os.show(o.Id);
         expect(no.Status).toEqual('checked');
     });
-    it("Add Order to Product", async () => {
+    it('Add Order to Product', async () => {
         const nop = await os.addProduct(op.Count, op.UserId, op.OrderId, op.ProductId);
         op.Id = nop.Id;
         expect(nop).toBeDefined();

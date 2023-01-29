@@ -76,14 +76,14 @@ fdescribe('Order Model Tests', () => {
     CreateTime: new Date(),
     UserId: 0,
   };
-  const op:OrderProduct={
+  const op: OrderProduct = {
     Id: 0,
     Count: 1,
     CreateTime: new Date(),
     UserId: user.id,
     OrderId: o.Id,
-    ProductId: p.Id
-}
+    ProductId: p.Id,
+  };
   it('Create Order function', async () => {
     const nu = await us.show(1);
     if (nu != undefined) {
@@ -91,14 +91,14 @@ fdescribe('Order Model Tests', () => {
       p.CreatedBy = nu.id;
       o.UserId = nu.id;
       user.id = nu.id;
-      op.UserId=nu.id;
+      op.UserId = nu.id;
     } else {
       const nu = await us.create(user);
       category.CreatedBy = nu.id;
       p.CreatedBy = nu.id;
       o.UserId = nu.id;
       user.id = nu.id;
-      op.UserId=nu.id;
+      op.UserId = nu.id;
     }
     const mycategory = await cs.show(1);
     if (mycategory != undefined) {
@@ -113,16 +113,15 @@ fdescribe('Order Model Tests', () => {
     if (np != undefined) {
       //now the product is available
       p.Id = np.Id;
-      op.ProductId=np.Id;
-
+      op.ProductId = np.Id;
     } else {
       const np = await ps.Create(p);
       p.Id = np.Id;
-      op.ProductId=np.Id;
+      op.ProductId = np.Id;
     }
     const no = await os.Create(o);
     o.Id = no.Id;
-    op.OrderId=no.Id;
+    op.OrderId = no.Id;
     expect(no.Id).toBeGreaterThan(0);
   });
   it('Index', async () => {
@@ -139,11 +138,11 @@ fdescribe('Order Model Tests', () => {
 
     expect((no as Order).Status).toEqual('checked');
   });
-  it("Add Order to Product",async () => {
-   const nop= await os.addProduct(op.Count,op.UserId,op.OrderId,op.ProductId)
-   op.Id= nop.Id
-   expect(nop).toBeDefined()
-  })
+  it('Add Order to Product', async () => {
+    const nop = await os.addProduct(op.Count, op.UserId, op.OrderId, op.ProductId);
+    op.Id = nop.Id;
+    expect(nop).toBeDefined();
+  });
   it('Delete', async () => {
     await os.delete(o.Id);
     const np = await os.show(p.Id);

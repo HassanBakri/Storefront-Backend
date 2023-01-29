@@ -100,7 +100,7 @@ class OrderStore {
             return order;
         }
         catch (err) {
-            throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`);
+            throw new Error(`Could not add product ${productId} to order ${orderId}\n ${err}`);
         }
     }
     /**
@@ -143,10 +143,12 @@ class OrderStore {
      */
     async checkout(status, orderId) {
         try {
+            console.log("sending sql : update orders set Status= $1 where id=$2;");
             const sql = 'update orders set Status= $1 where id=$2; ';
             // @ts-ignore
             const conn = await database_1.default.connect();
             await conn.query(sql, [status, orderId]);
+            console.log("query executed");
             //result.rows[0];
             conn.release();
             //return c;
