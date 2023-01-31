@@ -71,6 +71,8 @@ const create = async (_req: Request, res: Response) => {
   const CreatedBy = _req.currentUser.id;
   const CategoryId = _req.body.categoryId;
   const Available_Items = _req.body.available_Items;
+  console.log("req body",_req.body)
+  console.log(!Name ,!Description , isNaN(Price) ,isNaN(CategoryId),!Available_Items , !Price , !CategoryId)
   if (!Name || !Description || isNaN(Price) || isNaN(CategoryId) || !Available_Items || !Price || !CategoryId) {
     res.status(400);
     res.json({ status: ' improper request ' });

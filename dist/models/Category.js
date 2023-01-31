@@ -26,7 +26,7 @@ class Categorytore {
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [id]);
             conn.release();
-            console.log('show Result :', result.rows[0]);
+            //console.log('show Result :', result.rows[0].id,result.rows[0]);
             if (result.rows[0] == undefined)
                 return undefined;
             const c = {
@@ -37,6 +37,7 @@ class Categorytore {
                 icon: result.rows[0].icon,
                 CreatedBy: result.rows[0].CreatedBy,
             };
+            //console.log("Show return value ",c)
             return c;
         }
         catch (err) {
@@ -85,7 +86,7 @@ class Categorytore {
             // @ts-ignore
             const conn = await database_1.default.connect();
             const result = await conn.query(sql, [c.Name, c.Description, c.icon, c.Id]);
-            console.log('after updating category  ', c.Name, result.rows[0]);
+            console.log('after updating category  ', c.Name, c, result.rows[0]);
             conn.release();
             const cc = (await this.show(c.Id));
             return cc;

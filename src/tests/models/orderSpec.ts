@@ -37,7 +37,7 @@ describe('verifing Order model methods exist', () => {
     expect(os.delete).toBeDefined();
   });
 });
-fdescribe('Order Model Tests', () => {
+describe('Order Model Tests', () => {
   const cs = new Categorytore();
   const us = new UserStore();
   const ps = new ProductStore();
@@ -46,9 +46,9 @@ fdescribe('Order Model Tests', () => {
     id: 0,
     FirstName: 'Hassan',
     LastName: 'Bakri',
-    UserName: 'hassanbakri1',
+    UserName: 'hassanbakri6',
     Password: '123456',
-    Email: 'hassanbakry1@gmail.com',
+    Email: 'hassanbakry6@gmail.com',
     PhoneNumber: '0533201601',
   };
   const category: Category = {

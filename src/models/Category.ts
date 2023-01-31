@@ -34,7 +34,7 @@ export class Categorytore {
       const result = await conn.query(sql, [id]);
 
       conn.release();
-      console.log('show Result :', result.rows[0]);
+      //console.log('show Result :', result.rows[0].id,result.rows[0]);
       if (result.rows[0] == undefined) return undefined;
       const c: Category = {
         Id: result.rows[0].id,
@@ -44,6 +44,7 @@ export class Categorytore {
         icon: result.rows[0].icon,
         CreatedBy: result.rows[0].CreatedBy,
       };
+      //console.log("Show return value ",c)
       return c;
     } catch (err) {
       throw new Error(`Could not find Category ${id}. Error: ${err}`);
@@ -96,7 +97,7 @@ export class Categorytore {
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [c.Name, c.Description, c.icon, c.Id]);
-      console.log('after updating category  ', c.Name, result.rows[0]);
+      console.log('after updating category  ', c.Name, c,result.rows[0]);
 
       conn.release();
       const cc = (await this.show(c.Id)) as Category;

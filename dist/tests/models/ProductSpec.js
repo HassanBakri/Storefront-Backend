@@ -29,9 +29,9 @@ describe('Product Model Tests', () => {
         id: 0,
         FirstName: 'Hassan',
         LastName: 'Bakri',
-        UserName: 'hassanbakri1',
+        UserName: 'hassanbakri99',
         Password: '123456',
-        Email: 'hassanbakry1@gmail.com',
+        Email: 'hassanbakry99@gmail.com',
         PhoneNumber: '0533201601',
     };
     const category = {

@@ -27,7 +27,7 @@ const index = async (_req, res) => {
 const show = async (_req, res) => {
     if (!parseInt(_req.params.id)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const category = await store.show(parseInt(_req.params.id)).catch((err) => {
@@ -48,7 +48,7 @@ const show = async (_req, res) => {
 const destroy = async (_req, res) => {
     if (!parseInt(_req.params.id)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const deleted = await store.delete(parseInt(_req.params.id)).catch((err) => {
@@ -70,9 +70,10 @@ async function create(_req, res) {
     const name = _req.body.name;
     const description = _req.body.description;
     const icon = _req.body.icon;
+    console.log('this is create category', name, description, icon);
     if (!name || !description || !icon) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const c = {
@@ -104,9 +105,10 @@ const update = async (_req, res) => {
     const description = _req.body.description;
     const date = _req.body.date;
     const icon = _req.body.icon;
+    console.log(!name, !description, !icon, !id);
     if (!name || !description || !icon || !id) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const c = {

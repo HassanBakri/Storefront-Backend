@@ -21,7 +21,7 @@ CREATE TABLE Orders
   CreateTime timestamp default now(),
   UserId INT NOT NULL,
   PRIMARY KEY (Id),
-  FOREIGN KEY (UserId) REFERENCES Users(Id)
+  FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE Category
@@ -33,7 +33,7 @@ CREATE TABLE Category
   icon VARCHAR(255) NOT NULL,
   CreatedBy INT NOT NULL,
   PRIMARY KEY (Id),
-  FOREIGN KEY (CreatedBy) REFERENCES Users(Id)
+  FOREIGN KEY (CreatedBy) REFERENCES Users(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE Product
@@ -47,8 +47,8 @@ CREATE TABLE Product
   CategoryId INT NOT NULL,
   Available_Items INT NOT NULL,
   PRIMARY KEY (Id),
-  FOREIGN KEY (CreatedBy) REFERENCES Users(Id),
-  FOREIGN KEY (CategoryId) REFERENCES Category(Id)
+  FOREIGN KEY (CreatedBy) REFERENCES Users(Id) ON DELETE CASCADE,
+  FOREIGN KEY (CategoryId) REFERENCES Category(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE OrderProducts
@@ -60,7 +60,7 @@ CREATE TABLE OrderProducts
   OrderId INT NOT NULL,--Count UserId OrderId ProductId
   ProductId INT NOT NULL,
   PRIMARY KEY (Id),
-  FOREIGN KEY (UserId) REFERENCES Users(Id),
-  FOREIGN KEY (OrderId) REFERENCES Orders(Id),
-  FOREIGN KEY (ProductId) REFERENCES Product(Id)
+  FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
+  FOREIGN KEY (OrderId) REFERENCES Orders(Id) ON DELETE CASCADE,
+  FOREIGN KEY (ProductId) REFERENCES Product(Id) ON DELETE CASCADE
 );

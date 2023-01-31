@@ -59,12 +59,18 @@ const auth = async (_req: Request, res: Response) => {
       return;
     }
   });
-  const token = jwt.sign({ User: User }, conf.JWTSECRIT as string);
-  res.json(token);
+  if (res.headersSent) return;
+  if (User) {
+    const token = jwt.sign({ User: User }, conf.JWTSECRIT as string);
+    res.json(token);
+  } else {
+    res.status(400);
+    res.json({ status: ' invalid username/password' });
+  }
 };
 
 const create = async (_req: Request, res: Response) => {
-  if (!_req.params.firstname || !_req.params.lastname || !_req.params.username || !_req.params.email || !_req.params.phonenumber || !_req.params.password) {
+  if (!_req.body.firstname || !_req.body.lastname || !_req.body.username || !_req.body.email || !_req.body.phonenumber || !_req.body.password) {
     res.status(400);
     res.json({ status: ' improper request ' });
     return;
@@ -93,6 +99,7 @@ const create = async (_req: Request, res: Response) => {
     }
   });
   try {
+    if (res.headersSent) return;
     const token = jwt.sign({ User: newUser }, conf.JWTSECRIT as string);
     res.json(token);
   } catch (err) {

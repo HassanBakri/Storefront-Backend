@@ -34,14 +34,15 @@ describe('User Model Tests', () => {
     id: 0,
     FirstName: 'Hassan',
     LastName: 'Bakri',
-    UserName: 'hassanbakri',
+    UserName: 'hassanbakrymodel',
     Password: '123456',
-    Email: 'hassanbakry@gmail.com',
+    Email: 'hassanbakrymodel@gmail.com',
     PhoneNumber: '0533201601',
   };
   it('Create User function', async () => {
     const myuser = await us.create(user);
     user.id = myuser.id;
+    console.log("Created user Id :", myuser.id)
     expect(myuser.id).toBeGreaterThan(0);
   });
   it('Index', async () => {

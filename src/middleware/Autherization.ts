@@ -10,7 +10,7 @@ export interface TokenInterface {
 const validateToken = (request: Request, response: Response, next: NextFunction) => {
   try {
     const authorization: String = request.headers.authorization as string;
-    console.log(authorization);
+    //console.log(authorization);
     if (authorization == null || authorization == undefined) {
       response.status(401).json({
         error: new Error('Invalid request!'),
@@ -22,17 +22,14 @@ const validateToken = (request: Request, response: Response, next: NextFunction)
     console.log('verified token' + decodedToken);
     const dt = jwt.decode(token);
     //const cu=(decodedToken as TokenInterface).user;
-    console.log('decoded token ', dt);
+   // console.log('decoded token ', dt);
     request.currentUser = (dt as TokenInterface).User;
-    //request.currentUser=
-    //const userId = decodedToken.userId;
-    //if (req.body.userId && req.body.userId !== decodedToken. userId) {
-    //throw 'Invalid user ID';
-    //} else {
+
     next();
     //}
-  } catch {
-    console.log('Eror happend');
+  } catch (err) {
+    console.log(`Error in ${__filename} `);
+    console.log('Eror happend\n' + err);
     response.status(401).json({
       error: new Error('Invalid request!'),
     });

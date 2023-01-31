@@ -66,7 +66,7 @@ async function create(_req: Request, res: Response): Promise<void> {
   const name = _req.body.name;
   const description = _req.body.description;
   const icon = _req.body.icon;
-
+  console.log('this is create category', name, description, icon);
   if (!name || !description || !icon) {
     res.status(400);
     res.json({ status: ' improper request ' });
@@ -102,6 +102,7 @@ const update = async (_req: Request, res: Response) => {
   const description = _req.body.description;
   const date = _req.body.date;
   const icon = _req.body.icon;
+  console.log(!name , !description ,!icon ,!id)
   if (!name || !description || !icon || !id) {
     res.status(400);
     res.json({ status: ' improper request ' });

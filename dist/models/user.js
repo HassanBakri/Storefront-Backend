@@ -25,7 +25,7 @@ class UserStore {
             const sql = 'SELECT * FROM Users WHERE id=$1 ;';
             // @ts-ignore
             const conn = await database_1.default.connect();
-            console.log('ID', id);
+            console.log('show User ID', id);
             const result = await conn.query(sql, [id]);
             conn.release();
             console.log('user after show', result.rows[0]);
@@ -40,6 +40,7 @@ class UserStore {
                 Email: result.rows[0].email,
                 PhoneNumber: result.rows[0].phonenumber,
             };
+            console.log("Show User return value ", u);
             return u;
         }
         catch (err) {
@@ -107,6 +108,7 @@ class UserStore {
             return user;
         }
         catch (err) {
+            console.log("error stack", err);
             throw new Error(`Could not Update user ${u.Email}. Error: ${err}`);
         }
     }
@@ -132,9 +134,17 @@ class UserStore {
         const result = await conn.query(sql, [username]);
         console.log(username, password + '\t' + pepper + '\t' + result.rows.length);
         if (result.rows.length) {
-            const user = result.rows[0];
+            const user = {
+                id: result.rows[0].id,
+                FirstName: result.rows[0].firstname,
+                LastName: result.rows[0].lastname,
+                UserName: result.rows[0].username,
+                Password: result.rows[0].password,
+                Email: result.rows[0].email,
+                PhoneNumber: result.rows[0].phonenumber,
+            };
             console.log(result.rows[0], user.Email, user.id, user.Password, user.FirstName);
-            if (bcrypt_1.default.compareSync(password + pepper, user.password)) {
+            if (bcrypt_1.default.compareSync(password + pepper, user.Password)) {
                 return user;
             }
         }

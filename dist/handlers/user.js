@@ -28,7 +28,7 @@ const index = async (_req, res) => {
 const show = async (_req, res) => {
     if (!parseInt(_req.params.id)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const User = await store.show(parseInt(_req.params.id)).catch((err) => {
@@ -49,7 +49,7 @@ const show = async (_req, res) => {
 const auth = async (_req, res) => {
     if (!_req.body.username || !_req.body.password) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const User = await store.authenticate(_req.body.username, _req.body.password).catch((err) => {
@@ -65,13 +65,21 @@ const auth = async (_req, res) => {
             return;
         }
     });
-    const token = jsonwebtoken_1.default.sign({ User: User }, hassanconfig_1.default.JWTSECRIT);
-    res.json(token);
+    if (res.headersSent)
+        return;
+    if (User) {
+        const token = jsonwebtoken_1.default.sign({ User: User }, hassanconfig_1.default.JWTSECRIT);
+        res.json(token);
+    }
+    else {
+        res.status(400);
+        res.json({ status: ' invalid username/password' });
+    }
 };
 const create = async (_req, res) => {
-    if (!_req.params.firstname || !_req.params.lastname || !_req.params.username || !_req.params.email || !_req.params.phonenumber || !_req.params.password) {
+    if (!_req.body.firstname || !_req.body.lastname || !_req.body.username || !_req.body.email || !_req.body.phonenumber || !_req.body.password) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     console.log('Request Body\t' + _req.body + '\t' + _req.body.username);
@@ -98,6 +106,8 @@ const create = async (_req, res) => {
         }
     });
     try {
+        if (res.headersSent)
+            return;
         const token = jsonwebtoken_1.default.sign({ User: newUser }, hassanconfig_1.default.JWTSECRIT);
         res.json(token);
     }
@@ -110,7 +120,7 @@ const create = async (_req, res) => {
 const update = async (_req, res) => {
     if (!_req.body.id || !_req.body.firstname || !_req.body.lastname || !_req.body.username || !_req.body.email || !_req.body.phonenumber || !_req.body.password) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     console.log('Request Body\t' + _req.body + '\t' + _req.body.username);
@@ -141,7 +151,7 @@ const update = async (_req, res) => {
 const destroy = async (_req, res) => {
     if (!parseInt(_req.params.id)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const deleted = await store.delete(_req.params.id).catch((err) => {

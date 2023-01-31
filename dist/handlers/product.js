@@ -27,7 +27,7 @@ const index = async (_req, res) => {
 const show = async (_req, res) => {
     if (!parseInt(_req.params.id)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const p = await store.show(parseInt(_req.params.id)).catch((err) => {
@@ -48,7 +48,7 @@ const show = async (_req, res) => {
 const destroy = async (_req, res) => {
     if (!parseInt(_req.params.id)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const deleted = await store.delete(parseInt(_req.params.id)).catch((err) => {
@@ -75,9 +75,11 @@ const create = async (_req, res) => {
     const CreatedBy = _req.currentUser.id;
     const CategoryId = _req.body.categoryId;
     const Available_Items = _req.body.available_Items;
-    if (!Name || !Description || isNaN(Price) || isNaN(CategoryId) || !Available_Items || !(Price) || !(CategoryId)) {
+    console.log("req body", _req.body);
+    console.log(!Name, !Description, isNaN(Price), isNaN(CategoryId), !Available_Items, !Price, !CategoryId);
+    if (!Name || !Description || isNaN(Price) || isNaN(CategoryId) || !Available_Items || !Price || !CategoryId) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const p = {
@@ -114,9 +116,9 @@ const update = async (_req, res) => {
     const CreatedBy = _req.currentUser.id;
     const CategoryId = _req.body.categoryId;
     const Available_Items = _req.body.available_Items;
-    if (!Name || !Description || isNaN(Price) || isNaN(Id) || isNaN(CategoryId) || !Available_Items || !(Price) || !(Id) || !(CategoryId)) {
+    if (!Name || !Description || isNaN(Price) || isNaN(Id) || isNaN(CategoryId) || !Available_Items || !Price || !Id || !CategoryId) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const p = {

@@ -27,7 +27,7 @@ const index = async (_req, res) => {
 const show = async (_req, res) => {
     if (!parseInt(_req.params.id)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const o = await store.show(parseInt(_req.params.id)).catch((err) => {
@@ -48,7 +48,7 @@ const show = async (_req, res) => {
 const destroy = async (_req, res) => {
     if (!parseInt(_req.params.id)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const deleted = await store.delete(parseInt(_req.params.id)).catch((err) => {
@@ -94,6 +94,11 @@ const addProduct = async (_req, res) => {
     const quantity = _req.body.quantity;
     const orderId = _req.body.orderId;
     const userId = _req.currentUser.id;
+    if (!_req.body.productId || !_req.body.quantity || !_req.body.orderId || isNaN(orderId) || isNaN(quantity) || isNaN(orderId)) {
+        res.status(400);
+        res.json({ status: ' improper request ' });
+        return;
+    }
     const po = await store.addProduct(quantity, userId, orderId, productId).catch((err) => {
         console.log(`Error in ${__filename} in ${addProduct.name} Endpoint`);
         console.log(err.message);
@@ -114,7 +119,11 @@ const setProductCount = async (_req, res) => {
     const productId = _req.body.productId;
     const quantity = _req.body.quantity;
     const orderId = _req.body.orderId;
-    //const userId=_req.body.userId;
+    if (!_req.body.productId || !_req.body.quantity || !_req.body.orderId || isNaN(productId) || isNaN(quantity) || isNaN(orderId)) {
+        res.status(400);
+        res.json({ status: ' improper request ' });
+        return;
+    }
     const po = await store.setProductCount(productId, quantity, orderId).catch((err) => {
         console.log(`Error in ${__filename} in ${setProductCount.name} Endpoint`);
         console.log(err.message);
@@ -131,9 +140,9 @@ const setProductCount = async (_req, res) => {
     res.json(po);
 };
 const getProduct = async (_req, res) => {
-    if (!parseInt(_req.params.id)) {
+    if (!parseInt(_req.params.id) || isNaN(parseInt(_req.params.id))) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
     const orderId = parseInt(_req.params.id);
@@ -157,6 +166,11 @@ const removeProduct = async (_req, res) => {
     const productId = parseInt(_req.body.productId);
     //const quantity=_req.body.quantity;
     const orderId = parseInt(_req.body.orderId);
+    if (!_req.body.productId || !_req.body.orderId || isNaN(_req.body.productId) || isNaN(_req.body.orderId)) {
+        res.status(400);
+        res.json({ status: ' improper request ' });
+        return;
+    }
     await store.removeProduct(productId, orderId).catch((err) => {
         console.log(`Error in ${__filename} in ${removeProduct.name} Endpoint`);
         console.log(err.message);
@@ -174,14 +188,14 @@ const removeProduct = async (_req, res) => {
 };
 //  async checkout (status:string,orderId:number): Promise<void> {
 const checkout = async (_req, res) => {
-    console.log("checkout called");
+    console.log('checkout called');
     const orderId = parseInt(_req.body.orderId);
     if (!orderId || isNaN(orderId)) {
         res.status(400);
-        res.json({ "status": " improper request " });
+        res.json({ status: ' improper request ' });
         return;
     }
-    console.log("passed validation");
+    console.log('passed validation');
     await store.checkout('checkedout', orderId).catch((err) => {
         console.log(`Error in ${__filename} in ${checkout.name} Endpoint`);
         console.log(err.message);
@@ -195,7 +209,7 @@ const checkout = async (_req, res) => {
             return;
         }
     });
-    console.log("exiting checkout");
+    console.log('exiting checkout');
     res.status(200);
     res.json({});
 };
