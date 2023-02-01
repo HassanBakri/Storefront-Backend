@@ -59,7 +59,7 @@ export class UserStore {
       const pepper: string = process.env.BCRYPT_PASSWORD as string;
       const saltRounds: number = parseInt(process.env.SALT_ROUNDS as string);
       const salt = bcrypt.genSaltSync(saltRounds);
-      console.log(salt + '\t' + pepper + '\t' + saltRounds, u.FirstName, u.LastName, u.Email, u.UserName);
+      console.log("Model.Create",salt + '\t' + pepper + '\t' + saltRounds, u.FirstName, u.LastName, u.Email, u.UserName);
       u.Password = bcrypt.hashSync(u.Password + pepper, salt);
       const sql = 'INSERT INTO Users (FirstName, LastName,UserName,Email,PhoneNumber,Password) VALUES($1, $2, $3, $4,$5,$6) RETURNING *';
       // @ts-ignore
@@ -105,19 +105,30 @@ export class UserStore {
   async Update(u: User): Promise<User> {
     try {
       console.log('brfore update ', u.id, u.FirstName, u.LastName, u.UserName, u.Email, u.PhoneNumber);
-      const sql = 'Update Users set FirstName = $1, LastName= $2,UserName=$3,Email=$4,PhoneNumber=$5 where id=$6  ;';
+      const sql = 'Update Users set FirstName = $1, LastName= $2,PhoneNumber=$3 where Email=$4  ;';
       // @ts-ignore
       const conn = await Client.connect();
 
-      await conn.query(sql, [u.FirstName, u.LastName, u.UserName, u.Email, u.PhoneNumber, u.id]);
-      // const sql1 = 'SELECT id,FirstName, LastName,UserName,Email,PhoneNumber,CreateDate FROM Users WHERE id=$1';
-      // const resultq = await conn.query(sql1, [u.id]);
+      await conn.query(sql, [u.FirstName, u.LastName,  u.PhoneNumber,u.Email,]);
+      const sql1 = 'SELECT id,FirstName, LastName,UserName,Email,PhoneNumber,CreateDate FROM Users WHERE Email=$1';
+             const resultq = await conn.query(sql1, [u.Email]);
+            //conn.release();
+            //const user = (await this.show(u.id));
+            const nu: User = {
+              id: resultq.rows[0].id,
+              FirstName: resultq.rows[0].firstname,
+              LastName: resultq.rows[0].lastname,
+              UserName: resultq.rows[0].username,
+              Password: 'dd',
+              Email: resultq.rows[0].email,
+              PhoneNumber: resultq.rows[0].phonenumber,
+            };
 
       conn.release();
-      const user = (await this.show(u.id)) as User;
+      //const user = (await this.show(u.id)) as User;
 
-      console.log('after update ', user.FirstName, user.LastName, user.UserName, user.Email, user.PhoneNumber);
-      return user;
+      console.log('after update ', nu.FirstName, nu.LastName, nu.UserName, nu.Email, nu.PhoneNumber);
+      return nu;
     } catch (err) {
       console.log("error stack",err)
       throw new Error(`Could not Update user ${u.Email}. Error: ${err}`);

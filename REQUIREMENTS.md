@@ -11,7 +11,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Create 'product       [POST]  [token required]    (args: name:string, description:string,price:number,available_Items:number)
 - Update 'product       [PUT]   [token required]    (args: id:number ,name:string, description:string,price:number,available_Items:number)
 - Delete 'product/:id'  [DELETE][token required]
-- ~[OPTIONAL] Top 5 most popular products ~
+- ~[OPTIONAL] Top 5 most popular products~
 - ~[OPTIONAL] Products by category (args: product category)~
 
 #### Category
@@ -37,8 +37,8 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Delete 'order/:id'    [Delete]    [token required]
 - 
 - Add product to order 'order/:id/addProduct' [POST]    [token required]   (args: quantity:number, productId:number,orderId:number)
-- Show Order Products 'order/:id/getProducts' [post]    [token required]    (args: productId:number,quantity:number,orderId:number)
-- set product count in order 'order/setProductCount'    [POST] (args: product id, count )
+- Show Order Products 'order/:id/getProducts' [GET]    [token required]    
+- set product count in order 'order/setProductCount'    [POST]  (args: quantity:number, productId:number,orderId:number)
 - Remove product from order 'order/removeProduct'       [POST] [token required](args: productId:number,orderId:number)
 - Checkout order 'order/checkout'                       [POST] [token required]
 - ~[OPTIONAL] Completed Orders by user (args: user id)[token required]~

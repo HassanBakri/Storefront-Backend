@@ -9,9 +9,11 @@ export interface TokenInterface {
 }
 const validateToken = (request: Request, response: Response, next: NextFunction) => {
   try {
+    console.log("Entring validateToken middleware------------------------------------")
     const authorization: String = request.headers.authorization as string;
-    //console.log(authorization);
+    console.log(authorization);
     if (authorization == null || authorization == undefined) {
+      console.log("NOT VALID AUTH HEADER------------------------------------")
       response.status(401).json({
         error: new Error('Invalid request!'),
       });
@@ -28,6 +30,7 @@ const validateToken = (request: Request, response: Response, next: NextFunction)
     next();
     //}
   } catch (err) {
+    console.log("Error in auth middleware------------------------------------")
     console.log(`Error in ${__filename} `);
     console.log('Eror happend\n' + err);
     response.status(401).json({

@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { User, UserStore } from '../models/user';
 import jwt from 'jsonwebtoken';
 import conf from '../hassanconfig';
+import authmd from '../middleware/Autherization';
 
 const store = new UserStore();
 //const r=express.Router();
@@ -101,6 +102,7 @@ const create = async (_req: Request, res: Response) => {
   try {
     if (res.headersSent) return;
     const token = jwt.sign({ User: newUser }, conf.JWTSECRIT as string);
+    console.log("token ::",token)
     res.json(token);
   } catch (err) {
     console.log(err);
@@ -109,7 +111,11 @@ const create = async (_req: Request, res: Response) => {
   }
 };
 const update = async (_req: Request, res: Response) => {
-  if (!_req.body.id || !_req.body.firstname || !_req.body.lastname || !_req.body.username || !_req.body.email || !_req.body.phonenumber || !_req.body.password) {
+  console.log("Entring Update Endpoint------------------------------------")
+  //  if (!_req.body.id || !_req.body.firstname || !_req.body.lastname || !_req.body.username || !_req.body.email || !_req.body.phonenumber || !_req.body.password) {
+    console.log("Update EndPoint",_req.body.id ,_req.body.firstname ,_req.body.lastname ,_req.body.username ,_req.body.email,_req.body.phonenumber ,_req.body.password) 
+
+  if (!_req.body.firstname || !_req.body.lastname || !_req.body.username || !_req.body.email || !_req.body.phonenumber || !_req.body.password) {
     res.status(400);
     res.json({ status: ' improper request ' });
     return;
@@ -169,8 +175,8 @@ const Routes = (app: express.Application) => {
   UserRoutes.route('/users/:id').get(show);
   UserRoutes.route('/users/auth').post(auth);
   UserRoutes.route('/users').post(create);
-  UserRoutes.route('/users').put(auth, update);
-  UserRoutes.route('/users/:id').delete(auth, destroy);
+  UserRoutes.route('/users').put(authmd, update);
+  UserRoutes.route('/users/:id').delete(authmd, destroy);
   app.use(UserRoutes);
 };
 

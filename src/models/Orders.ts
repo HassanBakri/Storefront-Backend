@@ -150,16 +150,20 @@ export class OrderStore {
    */
   async removeProduct(productId: number, orderId: number): Promise<void> {
     try {
+      console.log("Enterd Order Model Delete Function")
       const sql = 'delete  from OrderProducts where  orderid=$2 and ProductId=$1 ; ';
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [productId, orderId]);
+      const res=await conn.query(sql, [productId, orderId]);
 
       conn.release();
-      result.rows[0];
+      console.log("relesed connection",res)
+      //result.rows[0];
       //return c;
+      return;
     } catch (error) {
+      console.log("Error on Delete function in file",__filename,"\n",error)
       throw new Error(`Could not delete  Product ${productId}  on order ${orderId}. Error: ${error}`);
     }
   }

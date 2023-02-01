@@ -164,12 +164,13 @@ const removeProduct = async (_req: Request, res: Response) => {
   const productId: number = parseInt(_req.body.productId);
   //const quantity=_req.body.quantity;
   const orderId: number = parseInt(_req.body.orderId);
-
+console.log("Start remove product Function")
   if (!_req.body.productId || !_req.body.orderId || isNaN(_req.body.productId) || isNaN(_req.body.orderId)) {
     res.status(400);
     res.json({ status: ' improper request ' });
     return;
   }
+  console.log("passed validation")
   await store.removeProduct(productId, orderId).catch((err: Error) => {
     console.log(`Error in ${__filename} in ${removeProduct.name} Endpoint`);
     console.log(err.message);
@@ -183,6 +184,7 @@ const removeProduct = async (_req: Request, res: Response) => {
     }
   });
   res.status(200);
+  return
 };
 //  async checkout (status:string,orderId:number): Promise<void> {
 const checkout = async (_req: Request, res: Response) => {
