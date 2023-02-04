@@ -6,25 +6,22 @@ import conf from '../hassanconfig';
 const store = new Categorytore();
 
 const index = async (_req: Request, res: Response) => {
-try {
-  const categories = await store.index()
-  res.json(categories);
-}catch(err:unknown) {
+  try {
+    const categories = await store.index();
+    res.json(categories);
+  } catch (err: unknown) {
     console.log(`Error in ${__filename} in ${index.name} Endpoint`);
     console.log(err);
     res.status(500);
     if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      if(err instanceof (Error))
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      else
-      res.json({ status: 'faild', ErrorDetails:err });
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
       return;
     } else {
       res.json({ status: 'faild' });
       return;
     }
-  };
-  
+  }
 };
 
 const show = async (_req: Request, res: Response) => {
@@ -34,24 +31,21 @@ const show = async (_req: Request, res: Response) => {
     return;
   }
   try {
-  const category = await store.show(parseInt(_req.params.id))
-   res.json(category);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const category = await store.show(parseInt(_req.params.id));
+    res.json(category);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-};
- 
 };
 const destroy = async (_req: Request, res: Response) => {
   if (!parseInt(_req.params.id)) {
@@ -60,24 +54,21 @@ const destroy = async (_req: Request, res: Response) => {
     return;
   }
   try {
-  const deleted = await store.delete(parseInt(_req.params.id))
-   res.json(deleted);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const deleted = await store.delete(parseInt(_req.params.id));
+    res.json(deleted);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
- 
 };
 
 async function create(_req: Request, res: Response): Promise<void> {
@@ -100,24 +91,21 @@ async function create(_req: Request, res: Response): Promise<void> {
     CreatedBy: _req.currentUser.id,
   };
   try {
-  const nc = await store.Create(c)
-  res.json(nc);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const nc = await store.Create(c);
+    res.json(nc);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-};
-  
 }
 
 const update = async (_req: Request, res: Response) => {
@@ -141,24 +129,21 @@ const update = async (_req: Request, res: Response) => {
     CreatedBy: 0,
   };
   try {
-  const nc = await store.Update(c)
-   res.json(nc);
-  }catch(err:unknown) {
+    const nc = await store.Update(c);
+    res.json(nc);
+  } catch (err: unknown) {
     console.log(`Error in ${__filename} in ${index.name} Endpoint`);
     console.log(err);
     res.status(500);
     if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      if(err instanceof (Error))
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      else
-      res.json({ status: 'faild', ErrorDetails:err });
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
       return;
     } else {
       res.json({ status: 'faild' });
       return;
     }
-  };
- 
+  }
 };
 
 const CategoryRoutes = Router();

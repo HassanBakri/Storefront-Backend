@@ -72,7 +72,7 @@ describe('Testing Oder EndPoints', () => {
     productOrder.orderId = Order.Id;
     productOrder.productId = product.id;
     const response1 = await request.post('/order/addProduct').set('Authorization', auth_token).send(productOrder);
-    
+
     expect(response1.status).toBe(200);
   });
   it('Get Order Products EndPoint', async () => {
@@ -96,7 +96,7 @@ describe('Testing Oder EndPoints', () => {
     };
     console.log(data);
     const x = await request.post('/order/removeProduct').set('Authorization', auth_token).send(data);
-    console.log("inside the test case","\n",x)
+    console.log('inside the test case', '\n', x);
     expect(x.status).toEqual(200);
   });
 

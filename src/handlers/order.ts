@@ -7,52 +7,46 @@ const store = new OrderStore();
 
 const index = async (_req: Request, res: Response) => {
   try {
-  const o = await store.index()
-  res.json(o);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
-  }
-}
-};
-
-const show = async (_req: Request, res: Response) => {
-
-  if (!parseInt(_req.params.id)) {
-    res.status(400);
-    res.json({ status: ' improper request ' });
-    return;
-  }
-  try {
-  const o = await store.show(parseInt(_req.params.id))
-   res.json(o);
-  }catch(err:unknown) {
+    const o = await store.index();
+    res.json(o);
+  } catch (err: unknown) {
     console.log(`Error in ${__filename} in ${index.name} Endpoint`);
     console.log(err);
     res.status(500);
     if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      if(err instanceof (Error))
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      else
-      res.json({ status: 'faild', ErrorDetails:err });
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
       return;
     } else {
       res.json({ status: 'faild' });
       return;
     }
   }
- 
-}
+};
+
+const show = async (_req: Request, res: Response) => {
+  if (!parseInt(_req.params.id)) {
+    res.status(400);
+    res.json({ status: ' improper request ' });
+    return;
+  }
+  try {
+    const o = await store.show(parseInt(_req.params.id));
+    res.json(o);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
+  }
+};
 const destroy = async (_req: Request, res: Response) => {
   if (!parseInt(_req.params.id)) {
     res.status(400);
@@ -60,24 +54,21 @@ const destroy = async (_req: Request, res: Response) => {
     return;
   }
   try {
-  const deleted = await store.delete(parseInt(_req.params.id))
-   res.json(deleted);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const deleted = await store.delete(parseInt(_req.params.id));
+    res.json(deleted);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
- 
 };
 
 const create = async (_req: Request, res: Response) => {
@@ -89,23 +80,21 @@ const create = async (_req: Request, res: Response) => {
     UserId: _req.currentUser.id,
   };
   try {
-  const no = await store.Create(o)
-   res.json(no);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const no = await store.Create(o);
+    res.json(no);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
 };
 
 const addProduct = async (_req: Request, res: Response) => {
@@ -120,23 +109,21 @@ const addProduct = async (_req: Request, res: Response) => {
     return;
   }
   try {
-  const po = await store.addProduct(quantity, userId, orderId, productId)
-  res.json(po);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const po = await store.addProduct(quantity, userId, orderId, productId);
+    res.json(po);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
 };
 //  async setProductCount (productId:number,count:number,orderId:number): Promise<void> {
 const setProductCount = async (_req: Request, res: Response) => {
@@ -150,24 +137,22 @@ const setProductCount = async (_req: Request, res: Response) => {
     return;
   }
   try {
-  const po = await store.setProductCount(productId, quantity, orderId)
-  
-  res.json(po);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const po = await store.setProductCount(productId, quantity, orderId);
+
+    res.json(po);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
 };
 const getProduct = async (_req: Request, res: Response) => {
   if (!parseInt(_req.params.id) || isNaN(parseInt(_req.params.id))) {
@@ -177,23 +162,21 @@ const getProduct = async (_req: Request, res: Response) => {
   }
   const orderId: number = parseInt(_req.params.id);
   try {
-  const po = await store.getProduct(orderId);
-  res.json(po);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const po = await store.getProduct(orderId);
+    res.json(po);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
 };
 //  async removeProduct (productId:number,orderId:number): Promise<void> {
 const removeProduct = async (_req: Request, res: Response) => {
@@ -208,27 +191,24 @@ const removeProduct = async (_req: Request, res: Response) => {
   }
   console.log('passed validation');
   try {
-  await store.removeProduct(productId, orderId)
-  res.status(200);
-  res.json({})
-  console.log("returning from model and status sent")
-  return;
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
+    await store.removeProduct(productId, orderId);
+    res.status(200);
+    res.json({});
+    console.log('returning from model and status sent');
     return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-
-}
 };
 //  async checkout (status:string,orderId:number): Promise<void> {
 const checkout = async (_req: Request, res: Response) => {
@@ -241,26 +221,23 @@ const checkout = async (_req: Request, res: Response) => {
   }
   //console.log('passed validation');
   try {
-  await store.checkout('checkedout', orderId)
-   console.log('exiting checkout');
-  res.status(200);
-  res.json({});
-}catch(err:unknown) {
+    await store.checkout('checkedout', orderId);
+    console.log('exiting checkout');
+    res.status(200);
+    res.json({});
+  } catch (err: unknown) {
     console.log(`Error in ${__filename} in ${index.name} Endpoint`);
     console.log(err);
     res.status(500);
     if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      if(err instanceof (Error))
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      else
-      res.json({ status: 'faild', ErrorDetails:err });
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
       return;
     } else {
       res.json({ status: 'faild' });
       return;
     }
   }
- 
 };
 const OrderRoutes = Router();
 

@@ -154,8 +154,8 @@ export class OrderStore {
       const sql = 'DELETE FROM OrderProducts where  OrderId=$2 and ProductId=$1 ';
       // @ts-ignore
       const conn = await Client.connect();
-
-      const res = await conn.query(sql, [productId, orderId]);
+      //const res =
+      await conn.query(sql, [productId, orderId]);
 
       conn.release();
       console.log('relesed connection');

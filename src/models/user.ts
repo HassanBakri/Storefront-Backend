@@ -151,37 +151,36 @@ export class UserStore {
   }
   //bcrypt.compareSync(password+pepper, user.password)
   async authenticate(username: string, password: string): Promise<User | null> {
-   try {
-	 const conn = await Client.connect();
-	    const sql = 'SELECT * FROM users WHERE username=$1 ;';
-	
-	    const pepper: string = process.env.BCRYPT_PASSWORD as string;
-	    //const saltRounds: number = parseInt(process.env.BCRYPT_PASSWORD as string);
-	    const result = await conn.query(sql, [username]);
-	
-	    console.log(username, password + '\t' + pepper + '\t' + result.rows.length);
-	
-	    if (result.rows.length) {
-	      const user: User = {
-	        id: result.rows[0].id,
-	        FirstName: result.rows[0].firstname,
-	        LastName: result.rows[0].lastname,
-	        UserName: result.rows[0].username,
-	        Password: result.rows[0].password,
-	        Email: result.rows[0].email,
-	        PhoneNumber: result.rows[0].phonenumber,
-	      };
-	
-	      console.log(result.rows[0], user.Email, user.id, user.Password, user.FirstName);
-	
-	      if (bcrypt.compareSync(password + pepper, user.Password)) {
-	        return user;
-	      }
-	    }
-	    return null;
-} catch (error) {
-  throw new Error(`Could not Authenticate Username ${username}. Error: ${error}`);
+    try {
+      const conn = await Client.connect();
+      const sql = 'SELECT * FROM users WHERE username=$1 ;';
 
-}
+      const pepper: string = process.env.BCRYPT_PASSWORD as string;
+      //const saltRounds: number = parseInt(process.env.BCRYPT_PASSWORD as string);
+      const result = await conn.query(sql, [username]);
+
+      console.log(username, password + '\t' + pepper + '\t' + result.rows.length);
+
+      if (result.rows.length) {
+        const user: User = {
+          id: result.rows[0].id,
+          FirstName: result.rows[0].firstname,
+          LastName: result.rows[0].lastname,
+          UserName: result.rows[0].username,
+          Password: result.rows[0].password,
+          Email: result.rows[0].email,
+          PhoneNumber: result.rows[0].phonenumber,
+        };
+
+        console.log(result.rows[0], user.Email, user.id, user.Password, user.FirstName);
+
+        if (bcrypt.compareSync(password + pepper, user.Password)) {
+          return user;
+        }
+      }
+      return null;
+    } catch (error) {
+      throw new Error(`Could not Authenticate Username ${username}. Error: ${error}`);
+    }
   }
 }

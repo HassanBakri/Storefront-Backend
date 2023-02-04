@@ -8,23 +8,21 @@ const store = new UserStore();
 //const r=express.Router();
 const index = async (_req: Request, res: Response) => {
   try {
-  const Users = await store.index()
-  res.json(Users);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const Users = await store.index();
+    res.json(Users);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
 };
 
 const show = async (_req: Request, res: Response) => {
@@ -34,23 +32,21 @@ const show = async (_req: Request, res: Response) => {
     return;
   }
   try {
-  const User = await store.show(parseInt(_req.params.id))
-  res.json(User);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const User = await store.show(parseInt(_req.params.id));
+    res.json(User);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
 };
 const auth = async (_req: Request, res: Response) => {
   if (!_req.body.username || !_req.body.password) {
@@ -58,33 +54,30 @@ const auth = async (_req: Request, res: Response) => {
     res.json({ status: ' improper request ' });
     return;
   }
-  
+
   try {
-  const User= await store.authenticate(_req.body.username, _req.body.password) 
-  
-  if (User) {
-    const token = jwt.sign({ User: User }, conf.JWTSECRIT as string);
-    res.json(token);
-  } else {
-    res.status(400);
-    res.json({ status: ' invalid username/password' });
+    const User = await store.authenticate(_req.body.username, _req.body.password);
+
+    if (User) {
+      const token = jwt.sign({ User: User }, conf.JWTSECRIT as string);
+      res.json(token);
+    } else {
+      res.status(400);
+      res.json({ status: ' invalid username/password' });
+    }
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
-  }
-}
-  
 };
 
 const create = async (_req: Request, res: Response) => {
@@ -103,18 +96,16 @@ const create = async (_req: Request, res: Response) => {
     PhoneNumber: _req.body.phonenumber,
     Password: _req.body.password,
   };
-  let newUser:User;
+  let newUser: User;
   try {
-   newUser= await store.create(User)
-}catch(err:unknown) {
+    newUser = await store.create(User);
+  } catch (err: unknown) {
     console.log(`Error in ${__filename} in ${index.name} Endpoint`);
     console.log(err);
     res.status(500);
     if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      if(err instanceof (Error))
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      else
-      res.json({ status: 'faild', ErrorDetails:err });
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
       return;
     } else {
       res.json({ status: 'faild' });
@@ -154,23 +145,21 @@ const update = async (_req: Request, res: Response) => {
     Password: _req.body.password,
   };
   try {
-  const updatedUser = await store.Update(User)
-  res.json(updatedUser);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const updatedUser = await store.Update(User);
+    res.json(updatedUser);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
 };
 
 const destroy = async (_req: Request, res: Response) => {
@@ -180,23 +169,21 @@ const destroy = async (_req: Request, res: Response) => {
     return;
   }
   try {
-  const deleted = await store.delete(_req.params.id)
-  res.json(deleted);
-}catch(err:unknown) {
-  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-  console.log(err);
-  res.status(500);
-  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-    if(err instanceof (Error))
-    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-    else
-    res.json({ status: 'faild', ErrorDetails:err });
-    return;
-  } else {
-    res.json({ status: 'faild' });
-    return;
+    const deleted = await store.delete(_req.params.id);
+    res.json(deleted);
+  } catch (err: unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
+    res.status(500);
+    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if (err instanceof Error) res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else res.json({ status: 'faild', ErrorDetails: err });
+      return;
+    } else {
+      res.json({ status: 'faild' });
+      return;
+    }
   }
-}
 };
 
 const UserRoutes = Router();

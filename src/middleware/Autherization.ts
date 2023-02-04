@@ -20,7 +20,8 @@ const validateToken = (request: Request, response: Response, next: NextFunction)
       return;
     }
     const token = authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, config.JWTSECRIT as string);
+    //const decodedToken =
+    jwt.verify(token, config.JWTSECRIT as string);
     //console.log('verified token' + decodedToken);
     const dt = jwt.decode(token);
     //const cu=(decodedToken as TokenInterface).user;
