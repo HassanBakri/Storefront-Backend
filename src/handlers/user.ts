@@ -7,19 +7,24 @@ import authmd from '../middleware/Autherization';
 const store = new UserStore();
 //const r=express.Router();
 const index = async (_req: Request, res: Response) => {
-  const Users = await store.index().catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-    console.log(err.message);
-    res.status(500);
-    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      return;
-    } else {
-      res.json({ status: 'faild' });
-      return;
-    }
-  });
+  try {
+  const Users = await store.index()
   res.json(Users);
+}catch(err:unknown) {
+  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+  console.log(err);
+  res.status(500);
+  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+    if(err instanceof (Error))
+    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+    else
+    res.json({ status: 'faild', ErrorDetails:err });
+    return;
+  } else {
+    res.json({ status: 'faild' });
+    return;
+  }
+}
 };
 
 const show = async (_req: Request, res: Response) => {
@@ -28,19 +33,24 @@ const show = async (_req: Request, res: Response) => {
     res.json({ status: ' improper request ' });
     return;
   }
-  const User = await store.show(parseInt(_req.params.id)).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${show.name} Endpoint`);
-    console.log(err.message);
-    res.status(500);
-    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      return;
-    } else {
-      res.json({ status: 'faild' });
-      return;
-    }
-  });
+  try {
+  const User = await store.show(parseInt(_req.params.id))
   res.json(User);
+}catch(err:unknown) {
+  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+  console.log(err);
+  res.status(500);
+  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+    if(err instanceof (Error))
+    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+    else
+    res.json({ status: 'faild', ErrorDetails:err });
+    return;
+  } else {
+    res.json({ status: 'faild' });
+    return;
+  }
+}
 };
 const auth = async (_req: Request, res: Response) => {
   if (!_req.body.username || !_req.body.password) {
@@ -48,19 +58,10 @@ const auth = async (_req: Request, res: Response) => {
     res.json({ status: ' improper request ' });
     return;
   }
-  const User = await store.authenticate(_req.body.username, _req.body.password).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${auth.name} Endpoint`);
-    console.log(err.message);
-    res.status(500);
-    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      return;
-    } else {
-      res.json({ status: 'faild' });
-      return;
-    }
-  });
-  if (res.headersSent) return;
+  
+  try {
+  const User= await store.authenticate(_req.body.username, _req.body.password) 
+  
   if (User) {
     const token = jwt.sign({ User: User }, conf.JWTSECRIT as string);
     res.json(token);
@@ -68,6 +69,22 @@ const auth = async (_req: Request, res: Response) => {
     res.status(400);
     res.json({ status: ' invalid username/password' });
   }
+}catch(err:unknown) {
+  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+  console.log(err);
+  res.status(500);
+  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+    if(err instanceof (Error))
+    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+    else
+    res.json({ status: 'faild', ErrorDetails:err });
+    return;
+  } else {
+    res.json({ status: 'faild' });
+    return;
+  }
+}
+  
 };
 
 const create = async (_req: Request, res: Response) => {
@@ -86,23 +103,28 @@ const create = async (_req: Request, res: Response) => {
     PhoneNumber: _req.body.phonenumber,
     Password: _req.body.password,
   };
-
-  const newUser = await store.create(User).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${create.name} Endpoint`);
-    console.log(err.message);
+  let newUser:User;
+  try {
+   newUser= await store.create(User)
+}catch(err:unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
     res.status(500);
     if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if(err instanceof (Error))
       res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else
+      res.json({ status: 'faild', ErrorDetails:err });
       return;
     } else {
       res.json({ status: 'faild' });
       return;
     }
-  });
+  }
   try {
     if (res.headersSent) return;
     const token = jwt.sign({ User: newUser }, conf.JWTSECRIT as string);
-    console.log("token ::",token)
+    console.log('token ::', token);
     res.json(token);
   } catch (err) {
     console.log(err);
@@ -111,9 +133,9 @@ const create = async (_req: Request, res: Response) => {
   }
 };
 const update = async (_req: Request, res: Response) => {
-  console.log("Entring Update Endpoint------------------------------------")
+  console.log('Entring Update Endpoint------------------------------------');
   //  if (!_req.body.id || !_req.body.firstname || !_req.body.lastname || !_req.body.username || !_req.body.email || !_req.body.phonenumber || !_req.body.password) {
-    console.log("Update EndPoint",_req.body.id ,_req.body.firstname ,_req.body.lastname ,_req.body.username ,_req.body.email,_req.body.phonenumber ,_req.body.password) 
+  console.log('Update EndPoint', _req.body.id, _req.body.firstname, _req.body.lastname, _req.body.username, _req.body.email, _req.body.phonenumber, _req.body.password);
 
   if (!_req.body.firstname || !_req.body.lastname || !_req.body.username || !_req.body.email || !_req.body.phonenumber || !_req.body.password) {
     res.status(400);
@@ -131,20 +153,24 @@ const update = async (_req: Request, res: Response) => {
     PhoneNumber: _req.body.phonenumber,
     Password: _req.body.password,
   };
-
-  const updatedUser = await store.Update(User).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${update.name} Endpoint`);
-    console.log(err.message);
-    res.status(500);
-    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      return;
-    } else {
-      res.json({ status: 'faild' });
-      return;
-    }
-  });
+  try {
+  const updatedUser = await store.Update(User)
   res.json(updatedUser);
+}catch(err:unknown) {
+  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+  console.log(err);
+  res.status(500);
+  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+    if(err instanceof (Error))
+    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+    else
+    res.json({ status: 'faild', ErrorDetails:err });
+    return;
+  } else {
+    res.json({ status: 'faild' });
+    return;
+  }
+}
 };
 
 const destroy = async (_req: Request, res: Response) => {
@@ -153,19 +179,24 @@ const destroy = async (_req: Request, res: Response) => {
     res.json({ status: ' improper request ' });
     return;
   }
-  const deleted = await store.delete(_req.params.id).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${destroy.name} Endpoint`);
-    console.log(err.message);
-    res.status(500);
-    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      return;
-    } else {
-      res.json({ status: 'faild' });
-      return;
-    }
-  });
+  try {
+  const deleted = await store.delete(_req.params.id)
   res.json(deleted);
+}catch(err:unknown) {
+  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+  console.log(err);
+  res.status(500);
+  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+    if(err instanceof (Error))
+    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+    else
+    res.json({ status: 'faild', ErrorDetails:err });
+    return;
+  } else {
+    res.json({ status: 'faild' });
+    return;
+  }
+}
 };
 
 const UserRoutes = Router();

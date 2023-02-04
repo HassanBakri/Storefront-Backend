@@ -48,7 +48,7 @@ export class UserStore {
         Email: result.rows[0].email,
         PhoneNumber: result.rows[0].phonenumber,
       };
-      console.log("Show User return value ", u)
+      console.log('Show User return value ', u);
       return u;
     } catch (err) {
       throw new Error(`Could not find User ${id}. Error: ${err}`);
@@ -59,7 +59,7 @@ export class UserStore {
       const pepper: string = process.env.BCRYPT_PASSWORD as string;
       const saltRounds: number = parseInt(process.env.SALT_ROUNDS as string);
       const salt = bcrypt.genSaltSync(saltRounds);
-      console.log("Model.Create",salt + '\t' + pepper + '\t' + saltRounds, u.FirstName, u.LastName, u.Email, u.UserName);
+      console.log('Model.Create', salt + '\t' + pepper + '\t' + saltRounds, u.FirstName, u.LastName, u.Email, u.UserName);
       u.Password = bcrypt.hashSync(u.Password + pepper, salt);
       const sql = 'INSERT INTO Users (FirstName, LastName,UserName,Email,PhoneNumber,Password) VALUES($1, $2, $3, $4,$5,$6) RETURNING *';
       // @ts-ignore
@@ -109,20 +109,20 @@ export class UserStore {
       // @ts-ignore
       const conn = await Client.connect();
 
-      await conn.query(sql, [u.FirstName, u.LastName,  u.PhoneNumber,u.Email,]);
+      await conn.query(sql, [u.FirstName, u.LastName, u.PhoneNumber, u.Email]);
       const sql1 = 'SELECT id,FirstName, LastName,UserName,Email,PhoneNumber,CreateDate FROM Users WHERE Email=$1';
-             const resultq = await conn.query(sql1, [u.Email]);
-            //conn.release();
-            //const user = (await this.show(u.id));
-            const nu: User = {
-              id: resultq.rows[0].id,
-              FirstName: resultq.rows[0].firstname,
-              LastName: resultq.rows[0].lastname,
-              UserName: resultq.rows[0].username,
-              Password: 'dd',
-              Email: resultq.rows[0].email,
-              PhoneNumber: resultq.rows[0].phonenumber,
-            };
+      const resultq = await conn.query(sql1, [u.Email]);
+      //conn.release();
+      //const user = (await this.show(u.id));
+      const nu: User = {
+        id: resultq.rows[0].id,
+        FirstName: resultq.rows[0].firstname,
+        LastName: resultq.rows[0].lastname,
+        UserName: resultq.rows[0].username,
+        Password: 'dd',
+        Email: resultq.rows[0].email,
+        PhoneNumber: resultq.rows[0].phonenumber,
+      };
 
       conn.release();
       //const user = (await this.show(u.id)) as User;
@@ -130,7 +130,7 @@ export class UserStore {
       console.log('after update ', nu.FirstName, nu.LastName, nu.UserName, nu.Email, nu.PhoneNumber);
       return nu;
     } catch (err) {
-      console.log("error stack",err)
+      console.log('error stack', err);
       throw new Error(`Could not Update user ${u.Email}. Error: ${err}`);
     }
   }
@@ -151,32 +151,37 @@ export class UserStore {
   }
   //bcrypt.compareSync(password+pepper, user.password)
   async authenticate(username: string, password: string): Promise<User | null> {
-    const conn = await Client.connect();
-    const sql = 'SELECT * FROM users WHERE username=$1 ;';
+   try {
+	 const conn = await Client.connect();
+	    const sql = 'SELECT * FROM users WHERE username=$1 ;';
+	
+	    const pepper: string = process.env.BCRYPT_PASSWORD as string;
+	    //const saltRounds: number = parseInt(process.env.BCRYPT_PASSWORD as string);
+	    const result = await conn.query(sql, [username]);
+	
+	    console.log(username, password + '\t' + pepper + '\t' + result.rows.length);
+	
+	    if (result.rows.length) {
+	      const user: User = {
+	        id: result.rows[0].id,
+	        FirstName: result.rows[0].firstname,
+	        LastName: result.rows[0].lastname,
+	        UserName: result.rows[0].username,
+	        Password: result.rows[0].password,
+	        Email: result.rows[0].email,
+	        PhoneNumber: result.rows[0].phonenumber,
+	      };
+	
+	      console.log(result.rows[0], user.Email, user.id, user.Password, user.FirstName);
+	
+	      if (bcrypt.compareSync(password + pepper, user.Password)) {
+	        return user;
+	      }
+	    }
+	    return null;
+} catch (error) {
+  throw new Error(`Could not Authenticate Username ${username}. Error: ${error}`);
 
-    const pepper: string = process.env.BCRYPT_PASSWORD as string;
-    //const saltRounds: number = parseInt(process.env.BCRYPT_PASSWORD as string);
-    const result = await conn.query(sql, [username]);
-
-    console.log(username, password + '\t' + pepper + '\t' + result.rows.length);
-
-    if (result.rows.length) {
-      const user: User = {
-        id: result.rows[0].id,
-        FirstName: result.rows[0].firstname,
-        LastName: result.rows[0].lastname,
-        UserName: result.rows[0].username,
-        Password: result.rows[0].password,
-        Email: result.rows[0].email,
-        PhoneNumber: result.rows[0].phonenumber,
-      };
-
-      console.log(result.rows[0], user.Email, user.id, user.Password, user.FirstName);
-
-      if (bcrypt.compareSync(password + pepper, user.Password)) {
-        return user;
-      }
-    }
-    return null;
+}
   }
 }

@@ -3,7 +3,7 @@ import app from '../../server';
 
 describe('Testing Categoty EndPoints', () => {
   const category = {
-    id:0,
+    id: 0,
     name: 'smart home appliances',
     description: 'smart home appliances',
     icon: 'smart home appliances',
@@ -30,15 +30,15 @@ describe('Testing Categoty EndPoints', () => {
     }
     //console.log(user_reg_respones)
     const response = await request.post('/category').set('Authorization', auth_token).set('Accept', 'application/json').send(category).expect('Content-Type', /json/);
-    category.id=response.body.Id
+    category.id = response.body.Id;
     expect(response.status).toBe(200);
   });
-  it("Update EndPoint",async()=>{
-    category.description="updateeddescription"
+  it('Update EndPoint', async () => {
+    category.description = 'updateeddescription';
     const response = await request.put('/category').set('Authorization', auth_token).set('Accept', 'application/json').send(category).expect('Content-Type', /json/);
-    console.log("Update EndPoint",response.body)
-    expect(response.body.Description).toEqual("updateeddescription");
-  })
+    console.log('Update EndPoint', response.body);
+    expect(response.body.Description).toEqual('updateeddescription');
+  });
   it('Index EndPoint', async () => {
     const response = await request.get('/category').set('Accept', 'application/json').expect('Content-Type', /json/);
 

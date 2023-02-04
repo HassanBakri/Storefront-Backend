@@ -150,20 +150,20 @@ export class OrderStore {
    */
   async removeProduct(productId: number, orderId: number): Promise<void> {
     try {
-      console.log("Enterd Order Model Delete Function")
-      const sql = 'delete  from OrderProducts where  orderid=$2 and ProductId=$1 ; ';
+      console.log('Enterd Order Model Delete Function');
+      const sql = 'DELETE FROM OrderProducts where  OrderId=$2 and ProductId=$1 ';
       // @ts-ignore
       const conn = await Client.connect();
 
-      const res=await conn.query(sql, [productId, orderId]);
+      const res = await conn.query(sql, [productId, orderId]);
 
       conn.release();
-      console.log("relesed connection",res)
+      console.log('relesed connection');
       //result.rows[0];
       //return c;
       return;
     } catch (error) {
-      console.log("Error on Delete function in file",__filename,"\n",error)
+      console.log('Error on Delete function in file', __filename, '\n', error);
       throw new Error(`Could not delete  Product ${productId}  on order ${orderId}. Error: ${error}`);
     }
   }
@@ -172,14 +172,14 @@ export class OrderStore {
    */
   async checkout(status: string, orderId: number): Promise<void> {
     try {
-      console.log('sending sql : update orders set Status= $1 where id=$2;');
+      //console.log('sending sql : update orders set Status= $1 where id=$2;');
 
       const sql = 'update orders set Status= $1 where id=$2; ';
       // @ts-ignore
       const conn = await Client.connect();
 
       await conn.query(sql, [status, orderId]);
-      console.log('query executed');
+      //console.log('query executed');
       //result.rows[0];
 
       conn.release();

@@ -97,7 +97,7 @@ export class Categorytore {
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [c.Name, c.Description, c.icon, c.Id]);
-      console.log('after updating category  ', c.Name, c,result.rows[0]);
+      console.log('after updating category  ', c.Name, c, result.rows[0]);
 
       conn.release();
       const cc = (await this.show(c.Id)) as Category;

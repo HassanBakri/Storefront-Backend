@@ -6,19 +6,25 @@ import conf from '../hassanconfig';
 const store = new Categorytore();
 
 const index = async (_req: Request, res: Response) => {
-  const categories = await store.index().catch((err: Error) => {
+try {
+  const categories = await store.index()
+  res.json(categories);
+}catch(err:unknown) {
     console.log(`Error in ${__filename} in ${index.name} Endpoint`);
-    console.log(err.message);
+    console.log(err);
     res.status(500);
     if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if(err instanceof (Error))
       res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else
+      res.json({ status: 'faild', ErrorDetails:err });
       return;
     } else {
       res.json({ status: 'faild' });
       return;
     }
-  });
-  res.json(categories);
+  };
+  
 };
 
 const show = async (_req: Request, res: Response) => {
@@ -27,19 +33,25 @@ const show = async (_req: Request, res: Response) => {
     res.json({ status: ' improper request ' });
     return;
   }
-  const category = await store.show(parseInt(_req.params.id)).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${show.name} Endpoint`);
-    console.log(err.message);
-    res.status(500);
-    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      return;
-    } else {
-      res.json({ status: 'faild' });
-      return;
-    }
-  });
-  res.json(category);
+  try {
+  const category = await store.show(parseInt(_req.params.id))
+   res.json(category);
+}catch(err:unknown) {
+  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+  console.log(err);
+  res.status(500);
+  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+    if(err instanceof (Error))
+    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+    else
+    res.json({ status: 'faild', ErrorDetails:err });
+    return;
+  } else {
+    res.json({ status: 'faild' });
+    return;
+  }
+};
+ 
 };
 const destroy = async (_req: Request, res: Response) => {
   if (!parseInt(_req.params.id)) {
@@ -47,19 +59,25 @@ const destroy = async (_req: Request, res: Response) => {
     res.json({ status: ' improper request ' });
     return;
   }
-  const deleted = await store.delete(parseInt(_req.params.id)).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${destroy.name} Endpoint`);
-    console.log(err.message);
-    res.status(500);
-    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      return;
-    } else {
-      res.json({ status: 'faild' });
-      return;
-    }
-  });
-  res.json(deleted);
+  try {
+  const deleted = await store.delete(parseInt(_req.params.id))
+   res.json(deleted);
+}catch(err:unknown) {
+  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+  console.log(err);
+  res.status(500);
+  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+    if(err instanceof (Error))
+    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+    else
+    res.json({ status: 'faild', ErrorDetails:err });
+    return;
+  } else {
+    res.json({ status: 'faild' });
+    return;
+  }
+}
+ 
 };
 
 async function create(_req: Request, res: Response): Promise<void> {
@@ -81,19 +99,25 @@ async function create(_req: Request, res: Response): Promise<void> {
     icon: icon,
     CreatedBy: _req.currentUser.id,
   };
-  const nc = await store.Create(c).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${create.name} Endpoint`);
-    console.log(err.message);
-    res.status(500);
-    if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
-      res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
-      return;
-    } else {
-      res.json({ status: 'faild' });
-      return;
-    }
-  });
+  try {
+  const nc = await store.Create(c)
   res.json(nc);
+}catch(err:unknown) {
+  console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+  console.log(err);
+  res.status(500);
+  if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+    if(err instanceof (Error))
+    res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+    else
+    res.json({ status: 'faild', ErrorDetails:err });
+    return;
+  } else {
+    res.json({ status: 'faild' });
+    return;
+  }
+};
+  
 }
 
 const update = async (_req: Request, res: Response) => {
@@ -102,7 +126,7 @@ const update = async (_req: Request, res: Response) => {
   const description = _req.body.description;
   const date = _req.body.date;
   const icon = _req.body.icon;
-  console.log(!name , !description ,!icon ,!id)
+  console.log(!name, !description, !icon, !id);
   if (!name || !description || !icon || !id) {
     res.status(400);
     res.json({ status: ' improper request ' });
@@ -116,19 +140,25 @@ const update = async (_req: Request, res: Response) => {
     icon: icon,
     CreatedBy: 0,
   };
-  const nc = await store.Update(c).catch((err: Error) => {
-    console.log(`Error in ${__filename} in ${update.name} Endpoint`);
-    console.log(err.message);
+  try {
+  const nc = await store.Update(c)
+   res.json(nc);
+  }catch(err:unknown) {
+    console.log(`Error in ${__filename} in ${index.name} Endpoint`);
+    console.log(err);
     res.status(500);
     if (conf.ENV?.trim() === 'dev' || conf.ENV?.trim() === 'test') {
+      if(err instanceof (Error))
       res.json({ status: 'faild', ErrorDetails: { name: err.name, message: err.message, stack: err.stack } });
+      else
+      res.json({ status: 'faild', ErrorDetails:err });
       return;
     } else {
       res.json({ status: 'faild' });
       return;
     }
-  });
-  res.json(nc);
+  };
+ 
 };
 
 const CategoryRoutes = Router();

@@ -42,7 +42,7 @@ describe('User Model Tests', () => {
   it('Create User function', async () => {
     const myuser = await us.create(user);
     user.id = myuser.id;
-    console.log("Created user Id :", myuser.id)
+    console.log('Created user Id :', myuser.id);
     expect(myuser.id).toBeGreaterThan(0);
   });
   it('Index', async () => {
